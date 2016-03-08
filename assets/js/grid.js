@@ -1,4 +1,4 @@
-var Grid = {
+Game.Grid = {
   init: function(rows, columns) {
     this.rows = rows;
     this.columns = columns;
@@ -12,7 +12,7 @@ var Grid = {
     var grid = [];
     for(i = 0; i < this.rows; i++) {
       grid[i] = [];
-      for(j = 0; j < this.rows; j++) {
+      for(j = 0; j < this.columns; j++) {
         grid[i][j] = Object.create(Cell).init(i, j);
       }
     }
@@ -35,8 +35,8 @@ var Grid = {
     return this.grid[row][column];
   },
   randomCell: function() {
-    var row = Math.floor(ROT.RNG.getUniform() * (rows - 1));
-    var column = Math.floor(ROT.RNG.getUniform() * (columns - 1));
+    var row = Math.floor(ROT.RNG.getUniform() * (this.rows - 1));
+    var column = Math.floor(ROT.RNG.getUniform() * (this.columns - 1));
     return this.getCell(row, column);
   },
   eachCell: function(callback) {
@@ -53,14 +53,16 @@ var Cell = {
   init: function(row, column) {
     this.row = row;
     this.column = column;
+    this.diggable = true;
+    this.dug = false;
     this.links = [];
     return this;
   },
   link: function(cell, bidi) {
-    if (bidi !== false) 
-      {bidi = true;}
+    if (bidi !== false) {bidi = true;}
+    this.dug = true;
     if (!this.linked(cell))  {
-      links.push(cell);
+      this.links.push(cell);
     }
     if (bidi) {
       cell.link(this, false);
@@ -75,7 +77,7 @@ var Cell = {
     }
   },
   linked: function(cell) {
-    return this.links.filter( function(link) {return link === cell;} ).length === 0;
+    return this.links.filter( function(link) {return link === cell;} ).length > 0;
   },
   neighbors: function() {
     var list = [];
@@ -83,5 +85,6 @@ var Cell = {
     if (this.south) { list.push(this.south); }
     if (this.east) { list.push(this.east); }
     if (this.west) { list.push(this.west); }
+    return list;
   }
 };
