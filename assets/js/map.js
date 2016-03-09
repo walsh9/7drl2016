@@ -5,7 +5,7 @@ Game.Map = {
   },
   randomDug: function() {
     var cell;
-    for (var x = 0; x < this.grid.size * 4; x++) {
+    for (var tries = 0; tries < this.grid.size * 4; tries++) {
       cell = this.grid.randomCell();
       if (cell.dug) {
         return cell;
@@ -14,7 +14,7 @@ Game.Map = {
   },
   randomUndug: function() {
     var cell;
-    for (var x = 0; x < this.grid.size * 4; x++) {
+    for (var tries = 0; tries < this.grid.size * 4; tries++) {
       cell = this.grid.randomCell();
       if (!cell.dug) {
         return cell;

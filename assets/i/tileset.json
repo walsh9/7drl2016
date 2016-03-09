@@ -1,7 +1,7 @@
-{"frames": [
+{"frames": {
 
+"dugeast":
 {
-	"filename": "dugeast.png",
 	"frame": {"x":0,"y":0,"w":34,"h":34},
 	"rotated": false,
 	"trimmed": false,
@@ -9,8 +9,8 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
+"dugnorth":
 {
-	"filename": "dugnorth.png",
 	"frame": {"x":34,"y":0,"w":34,"h":34},
 	"rotated": false,
 	"trimmed": false,
@@ -18,8 +18,8 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
+"dugsouth":
 {
-	"filename": "dugsouth.png",
 	"frame": {"x":68,"y":0,"w":34,"h":34},
 	"rotated": false,
 	"trimmed": false,
@@ -27,31 +27,22 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
+"dugwest":
 {
-	"filename": "dugwest.png",
 	"frame": {"x":102,"y":0,"w":34,"h":34},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
-},
-{
-	"filename": "tileset.png",
-	"frame": {"x":136,"y":0,"w":136,"h":34},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":136,"h":34},
-	"sourceSize": {"w":136,"h":34},
-	"pivot": {"x":0.5,"y":0.5}
-}],
+}},
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker",
 	"version": "1.0",
 	"image": "tileset.png",
 	"format": "RGBA8888",
-	"size": {"w":272,"h":34},
+	"size": {"w":136,"h":34},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:aa72bcec8abd671e60aa78ff7bd8f7f4:372be84fc48e29cdfb7fa23e0e46ac03:ace0e5e82375743ccde85e973fd84fb5$"
+	"smartupdate": "$TexturePacker:SmartUpdate:7e85b3db4b5ef21b0946298389150241:0c6f8936c9c05d34686bf74a3f75fcc1:ace0e5e82375743ccde85e973fd84fb5$"
 }
 }

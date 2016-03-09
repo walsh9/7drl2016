@@ -1,43 +1,43 @@
 Game.Grid = {
-  init: function(rows, columns) {
-    this.rows = rows;
-    this.columns = columns;
-    this.size = rows * columns;
+  init: function(width, height) {
+    this.columns = width;
+    this.rows = height;
+    this.size = width * height;
     this.grid = this.prepareGrid();
     this.configureCells();
     return this;
   },
   prepareGrid: function() {
-    var i, j;
+    var x, y;
     var grid = [];
-    for(i = 0; i < this.rows; i++) {
-      grid[i] = [];
-      for(j = 0; j < this.columns; j++) {
-        grid[i][j] = Object.create(Cell).init(i, j);
+    for(y = 0; y < this.rows; y++) {
+      grid[y] = [];
+      for(x = 0; x < this.columns; x++) {
+        grid[y][x] = Object.create(Cell).init(x, y);
       }
     }
     return grid;
   },
   configureCells: function() {
     this.eachCell( function(cell) {
-      var row = cell.row;
-      var col = cell.column;
-      cell.north = this.getCell(row - 1, col);
-      cell.south = this.getCell(row + 1, col);
-      cell.east  = this.getCell(row, col - 1);
-      cell.west  = this.getCell(row, col + 1);
+      var x = cell.column;
+      var y = cell.row;
+      cell.north = this.getCell(x, y - 1);
+      cell.south = this.getCell(x, y + 1);
+      cell.east  = this.getCell(x + 1, y);
+      cell.west  = this.getCell(x - 1, y);
     });
   },
-  getCell: function(row, column) {
-    if ((row < 0 || row >= this.rows) || (column < 0 || column >= this.columns)) {
+  getCell: function(x, y) {
+    if  ((x < 0 || x >= this.columns) || (y < 0 || y >= this.rows)) {
       return undefined;
     }
-    return this.grid[row][column];
+    return this.grid[y][x];
   },
   randomCell: function() {
-    var row = Math.floor(ROT.RNG.getUniform() * (this.rows - 1));
-    var column = Math.floor(ROT.RNG.getUniform() * (this.columns - 1));
-    return this.getCell(row, column);
+    var x = Math.floor(ROT.RNG.getUniform() * (this.columns - 1));
+    var y = Math.floor(ROT.RNG.getUniform() * (this.rows - 1));
+    return this.getCell(x, y);
   },
   eachCell: function(callback) {
     var self = this;
@@ -50,9 +50,9 @@ Game.Grid = {
 };
 
 var Cell = {
-  init: function(row, column) {
-    this.row = row;
-    this.column = column;
+  init: function(x, y) {
+    this.column = x;
+    this.row = y;
     this.diggable = true;
     this.dug = false;
     this.links = [];

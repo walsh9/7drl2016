@@ -2,7 +2,7 @@ var Game = {
   display: null,
   stage: null,
   currentScreen: null,
-  tileSize: {x: 34, y: 34 },
+  tileSize: {x: 34, y: 34},
   mapSize: {x: 13, y: 15},
   init: function() {
     this.display = PIXI.autoDetectRenderer(Game.mapSize.x * Game.tileSize.x, Game.mapSize.y * Game.tileSize.y);
@@ -12,7 +12,7 @@ var Game = {
     return this;
   },
   refresh: function() {
-    while (this.stage.children[0]) { this.stage.removeChild(stage.children[0]); }
+    while (this.stage.children[0]) { this.stage.removeChild(this.stage.children[0]); }
     this.currentScreen.render(this.display);
   },
   switchScreen: function(screen) {

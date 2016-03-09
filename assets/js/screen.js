@@ -40,7 +40,7 @@ Game.Screen.playScreen = {
     });
 
     function drawTile(container, tileIndex, pos) {
-      var textures = PIXI.loader.resources["assets/i/tileset.json"].textures; 
+      var textures = PIXI.loader.resources["assets/i/tileset.json"].textures;
       var tile = new PIXI.Sprite(textures[tileIndex]);
       tile.position.x = pos.x;
       tile.position.y = pos.y;
@@ -48,14 +48,14 @@ Game.Screen.playScreen = {
     }
 
     function drawCell(container, cell) {
-      var x = cell.row * Game.tileSize.x;
-      var y = cell.column * Game.tileSize.y;
+      var x = cell.column * Game.tileSize.x;
+      var y = cell.row * Game.tileSize.y;
       var pos = {x: x, y: y};
       if (cell.dug) {
-        if (cell.east  && cell.east.dug && cell.linked(cell.east))  { drawTile(container, 1, pos); }
-        if (cell.west  && cell.west.dug && cell.linked(cell.west))  { drawTile(container, 2, pos); }
-        if (cell.north && cell.north.dug && cell.linked(cell.north)) { drawTile(container, 3, pos); }
-        if (cell.south && cell.south.dug && cell.linked(cell.south)) { drawTile(container, 0, pos); }
+        if (cell.east  && cell.east.dug && cell.linked(cell.east))  { drawTile(container, "dugeast", pos); }
+        if (cell.west  && cell.west.dug && cell.linked(cell.west))  { drawTile(container, "dugwest", pos); }
+        if (cell.north && cell.north.dug && cell.linked(cell.north)) { drawTile(container, "dugnorth", pos); }
+        if (cell.south && cell.south.dug && cell.linked(cell.south)) { drawTile(container, "dugsouth", pos); }
       }
     }
 
