@@ -46,6 +46,16 @@ Game.Grid = {
         callback.call(self, cell);
       });
     });
+  },
+  filterCells: function(callback) {
+    var cells = [];
+    var self = this;
+    this.eachCell(function(cell) {
+      if (callback.call(self, cell) === true) {
+        cells.push(cell);
+      }
+    });
+    return cells;
   }
 };
 

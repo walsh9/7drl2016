@@ -1,5 +1,13 @@
 Game.Screen = {};
 
+Game.Screen.drawTile = function(container, tileIndex, pos) {
+      var textures = PIXI.loader.resources["assets/i/tileset.json"].textures;
+      var tile = new PIXI.Sprite(textures[tileIndex]);
+      tile.position.x = pos.x * Game.tileSize.x;
+      tile.position.y = pos.y * Game.tileSize.y;
+      container.addChild(tile);
+};
+
 Game.Screen.titleScreen = {
   enter: function() {    console.log("Entered start screen."); },
   exit: function() { console.log("Exited start screen."); },
@@ -27,11 +35,14 @@ Game.Screen.playScreen = {
   newLevel: function(level) {
     var width = Game.mapSize.x;
     var height = Game.mapSize.y;
-    this.grid = Object.create(Game.Grid).init(width, height);
-    this.map = Object.create(Game.Map).init(this.grid).generateTunnels();
+    this.map = Game.Map.Generators.Basic.create(width, height);
+    Game.Map.Generators.Basic.populate(this.map);
+    this.grid = this.map.grid;
   },
   render: function(display) {
     this.renderTiles(display);
+    this.renderEntities(display);
+    Game.display.render(Game.stage);
   },
   renderTiles: function(display) {
     Game.display.backgroundColor = 0x996633;
@@ -39,27 +50,23 @@ Game.Screen.playScreen = {
       drawCell(Game.stage, cell);
     });
 
-    function drawTile(container, tileIndex, pos) {
-      var textures = PIXI.loader.resources["assets/i/tileset.json"].textures;
-      var tile = new PIXI.Sprite(textures[tileIndex]);
-      tile.position.x = pos.x;
-      tile.position.y = pos.y;
-      container.addChild(tile);
-    }
-
     function drawCell(container, cell) {
-      var x = cell.column * Game.tileSize.x;
-      var y = cell.row * Game.tileSize.y;
+      var x = cell.column;
+      var y = cell.row;
       var pos = {x: x, y: y};
       if (cell.dug) {
-        if (cell.east  && cell.east.dug && cell.linked(cell.east))  { drawTile(container, "dugeast", pos); }
-        if (cell.west  && cell.west.dug && cell.linked(cell.west))  { drawTile(container, "dugwest", pos); }
-        if (cell.north && cell.north.dug && cell.linked(cell.north)) { drawTile(container, "dugnorth", pos); }
-        if (cell.south && cell.south.dug && cell.linked(cell.south)) { drawTile(container, "dugsouth", pos); }
+        if (cell.east  && cell.east.dug && cell.linked(cell.east))  { Game.Screen.drawTile(container, "dugeast", pos); }
+        if (cell.west  && cell.west.dug && cell.linked(cell.west))  { Game.Screen.drawTile(container, "dugwest", pos); }
+        if (cell.north && cell.north.dug && cell.linked(cell.north)) { Game.Screen.drawTile(container, "dugnorth", pos); }
+        if (cell.south && cell.south.dug && cell.linked(cell.south)) { Game.Screen.drawTile(container, "dugsouth", pos); }
       }
     }
-
-    Game.display.render(Game.stage);
+  },
+  renderEntities: function(display) {
+    for (var key in this.map.entities) {
+      var entity = this.map.entities[key];
+      Game.Screen.drawTile(Game.stage, entity.tile, {x: entity.x, y: entity.y} );
+    }
   },
   handleInput: function(inputType, inputData) {
 
