@@ -10,13 +10,13 @@ Game.Entity.actions.playerAction = function () {
 
 Game.Entity.actions.randomWalk = function () {
   var targetCell = this.cellHere().randomLink();
-  this.tryMove(targetCell.column, targetCell.row, this.map);
+  this.tryMove(targetCell.x, targetCell.y, this.map);
 };
 
 Game.Entity.actions.fall = function () {
   var targetCell = this.cellHere().south;
-  if (targetCell.dug && this.map.unoccupiedAt(targetCell.column, targetCell.row)) {
-    this.tryMove(targetCell.column, targetCell.row, this.map);
+  if (targetCell.dug && this.map.unoccupiedAt(targetCell.x, targetCell.y)) {
+    this.tryMove(targetCell.x, targetCell.y, this.map);
   }
 };
 

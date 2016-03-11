@@ -27,21 +27,21 @@ Game.Map.Generators.Basic = {
       if (!targetCell) {break;}
       var enemy = Object.create(Game.Entity).init(Game.Entity.templates.skullbot);
       map.addEntity(enemy);
-      enemy.setPosition(targetCell.column, targetCell.row, map);
+      enemy.setPosition(targetCell.x, targetCell.y, map);
     }
     for (n = 0; n < crateCount; n++) {
       targetCell = map.randomStable();
       if (!targetCell) {break;}
       var crate = Object.create(Game.Entity).init(Game.Entity.templates.crate);
       map.addEntity(crate);
-      crate.setPosition(targetCell.column, targetCell.row, map);
+      crate.setPosition(targetCell.x, targetCell.y, map);
     }
     return map;
   },
   addPlayer: function(map, player) {
     var playerPosition = map.randomEmpty();
-    player.x = playerPosition.column;
-    player.y = playerPosition.row;
+    player.x = playerPosition.x;
+    player.y = playerPosition.y;
     map.addEntity(player);
   }
 };

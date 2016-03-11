@@ -16,7 +16,7 @@ Game.Map = {
     var map = this;
     return this.find(function(cell) {
       return cell.dug && 
-      map.unoccupiedAt(cell.column, cell.row);
+      map.unoccupiedAt(cell.x, cell.y);
     });
   },
   randomDug: function() {
@@ -35,7 +35,7 @@ Game.Map = {
       return !cell.dug && 
         cell.south && 
         !cell.south.dug && 
-        map.entityAt(cell.column, cell.row) === undefined;
+        map.entityAt(cell.x, cell.y) === undefined;
     });
   },
   addEntity: function(entity) {
@@ -60,8 +60,8 @@ Game.Map = {
             delete this.entities[oldKey];
         }
     }
-    if (entity.x < 0 || entity.x >= this.grid.columns ||
-        entity.x < 0 || entity.y >= this.grid.rows) {
+    if (entity.x < 0 || entity.x >= this.grid.width ||
+        entity.x < 0 || entity.y >= this.grid.height) {
         throw new Error("Entity's position is out of bounds.");
     }
     var key = entity.x + ',' + entity.y;

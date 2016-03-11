@@ -54,8 +54,8 @@ Game.Screen.playScreen = {
     });
 
     function drawCell(container, cell) {
-      var x = cell.column;
-      var y = cell.row;
+      var x = cell.x;
+      var y = cell.y;
       var pos = {x: x, y: y};
       if (cell.dug) {
         if (cell.east  && cell.east.dug && cell.linked(cell.east))  { Game.Screen.drawTile(container, "dugeast", pos); }

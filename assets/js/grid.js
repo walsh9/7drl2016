@@ -1,7 +1,7 @@
 Game.Grid = {
   init: function(width, height) {
-    this.columns = width;
-    this.rows = height;
+    this.width = width;
+    this.height = height;
     this.size = width * height;
     this.grid = this.prepareGrid();
     this.configureCells();
@@ -10,9 +10,9 @@ Game.Grid = {
   prepareGrid: function() {
     var x, y;
     var grid = [];
-    for(y = 0; y < this.rows; y++) {
+    for(y = 0; y < this.height; y++) {
       grid[y] = [];
-      for(x = 0; x < this.columns; x++) {
+      for(x = 0; x < this.width; x++) {
         grid[y][x] = Object.create(Cell).init(x, y);
       }
     }
@@ -20,8 +20,8 @@ Game.Grid = {
   },
   configureCells: function() {
     this.eachCell( function(cell) {
-      var x = cell.column;
-      var y = cell.row;
+      var x = cell.x;
+      var y = cell.y;
       cell.north = this.getCell(x, y - 1);
       cell.south = this.getCell(x, y + 1);
       cell.east  = this.getCell(x + 1, y);
@@ -29,20 +29,20 @@ Game.Grid = {
     });
   },
   getCell: function(x, y) {
-    if  ((x < 0 || x >= this.columns) || (y < 0 || y >= this.rows)) {
+    if  ((x < 0 || x >= this.width) || (y < 0 || y >= this.height)) {
       return undefined;
     }
     return this.grid[y][x];
   },
   randomCell: function() {
-    var x = Math.floor(ROT.RNG.getUniform() * (this.columns - 1));
-    var y = Math.floor(ROT.RNG.getUniform() * (this.rows - 1));
+    var x = Math.floor(ROT.RNG.getUniform() * (this.width - 1));
+    var y = Math.floor(ROT.RNG.getUniform() * (this.height - 1));
     return this.getCell(x, y);
   },
   eachCell: function(callback) {
     var self = this;
-    this.grid.forEach(function (row) {
-      row.forEach(function(cell) {
+    this.grid.forEach(function (y) {
+      y.forEach(function(cell) {
         callback.call(self, cell);
       });
     });
@@ -61,8 +61,8 @@ Game.Grid = {
 
 var Cell = {
   init: function(x, y) {
-    this.column = x;
-    this.row = y;
+    this.x = x;
+    this.y = y;
     this.diggable = true;
     this.dug = false;
     this.links = [];
