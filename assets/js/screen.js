@@ -24,6 +24,7 @@ Game.Screen.playScreen = {
   level: 1,
   gameEnded: false,
   enter: function() {
+    this.player = Object.create(Game.Entity).init(Game.Entity.templates.player);
     this.newLevel(this.level);
   },
   everyTurn: function() {
@@ -37,7 +38,9 @@ Game.Screen.playScreen = {
     var height = Game.mapSize.y;
     this.map = Game.Map.Generators.Basic.create(width, height);
     Game.Map.Generators.Basic.populate(this.map);
+    Game.Map.Generators.Basic.addPlayer(this.map, this.player);
     this.grid = this.map.grid;
+    this.map.engine.start();
   },
   render: function(display) {
     this.renderTiles(display);
@@ -45,7 +48,7 @@ Game.Screen.playScreen = {
     Game.display.render(Game.stage);
   },
   renderTiles: function(display) {
-    Game.display.backgroundColor = 0x996633;
+    Game.display.backgroundColor = this.map.color;
     this.map.grid.eachCell( function(cell) {
       drawCell(Game.stage, cell);
     });
@@ -69,7 +72,42 @@ Game.Screen.playScreen = {
     }
   },
   handleInput: function(inputType, inputData) {
-
+      // If the game is over, enter will bring the user to the losing screen.
+    if (inputType === 'keydown') {
+      // Movement
+      if (inputData.keyCode === ROT.VK_LEFT || 
+        inputData.keyCode === ROT.VK_H ||
+        inputData.keyCode === ROT.VK_NUMPAD4 ||
+        inputData.keyCode === ROT.VK_A) {
+        this.move(-1, 0);
+      } else if (inputData.keyCode === ROT.VK_RIGHT || 
+                 inputData.keyCode === ROT.VK_L ||
+                 inputData.keyCode === ROT.VK_NUMPAD6 ||
+                 inputData.keyCode === ROT.VK_D) {
+        this.move(1, 0);
+      } else if (inputData.keyCode === ROT.VK_UP || 
+                 inputData.keyCode === ROT.VK_K ||
+                 inputData.keyCode === ROT.VK_NUMPAD8 ||
+                 inputData.keyCode === ROT.VK_W) {
+        this.move(0, -1);
+      } else if (inputData.keyCode === ROT.VK_DOWN || 
+                 inputData.keyCode === ROT.VK_J ||
+                 inputData.keyCode === ROT.VK_NUMPAD2 ||
+                 inputData.keyCode === ROT.VK_S) {
+        this.move(0, 1);
+      } else if (inputData.keyCode === ROT.VK_SPACE || 
+                 inputData.keyCode === ROT.VK_PERIOD) {
+        this.move(0, 0);
+      }
+      // Unlock the engine
+      this.player.map.engine.unlock();
+    } 
+  },
+  move: function(dX, dY) {
+      var newX = this.player.x + dX;
+      var newY = this.player.y + dY;
+      // Try to move to the new cell
+      this.player.tryMove(newX, newY, this.player.map);
   },
 };
 

@@ -96,5 +96,11 @@ var Cell = {
     if (this.east) { list.push(this.east); }
     if (this.west) { list.push(this.west); }
     return list;
+  },
+  randomLink: function() {
+    if (this.links.length > 0) {
+      return this.links[Math.floor(ROT.RNG.getUniform() * (this.links.length))];
+    }
+    return null;
   }
 };

@@ -1,13 +1,23 @@
 Game.Map = {
   init: function(grid) {
     this.grid = grid;
+    this.color = 0xaaaaff;
     this.entities = {};
+    this.scheduler = new ROT.Scheduler.Speed();
+    this.engine = new ROT.Engine(this.scheduler);
     return this;
   },
   find: function(qualifyFunction) {
     var candidates = this.grid.filterCells(qualifyFunction);
     var length = candidates.length;
     return candidates[Math.floor(ROT.RNG.getUniform() * (length - 1))];
+  },
+  randomEmpty: function() {
+    var map = this;
+    return this.find(function(cell) {
+      return cell.dug && 
+      map.unoccupiedAt(cell.column, cell.row);
+    });
   },
   randomDug: function() {
     return this.find(function(cell) {
@@ -20,21 +30,28 @@ Game.Map = {
     });
   },
   randomStable: function() {
+    var map = this;
     return this.find(function(cell) {
-      return !cell.dug && cell.south && !cell.south.dug;
+      return !cell.dug && 
+        cell.south && 
+        !cell.south.dug && 
+        map.entityAt(cell.column, cell.row) === undefined;
     });
   },
   addEntity: function(entity) {
     entity.map = this;
     this.updateEntityPosition(entity);
-    //this.scheduler.add(entity, true);
+    if (entity.isPlayer) {
+        this.player = entity;
+    }
+    this.scheduler.add(entity, true);
   },
   removeEntity: function(entity) {
     var key = entity.x + ',' + entity.y;
     if (this.entities[key] == entity) {
         delete this.entities[key];
     }
-    //this.scheduler.remove(entity);
+    this.scheduler.remove(entity);
   },
   updateEntityPosition: function(entity, oldX, oldY) {
     if (typeof oldX === 'number') {
@@ -55,6 +72,9 @@ Game.Map = {
   },
   entityAt: function(x, y){
     return this.entities[x + ',' + y];
+  },
+  unoccupiedAt: function(x, y) {
+    return !!(this.entities[x + ',' + y] === undefined);
   }
 };
 

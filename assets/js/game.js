@@ -9,6 +9,7 @@ var Game = {
     document.body.appendChild(this.display.view);
     this.stage = new PIXI.Container();
     this.switchScreen(Game.Screen.playScreen);
+    window.addEventListener('keydown', function(e) {Game.currentScreen.handleInput('keydown', e);});
     return this;
   },
   refresh: function() {
@@ -24,7 +25,7 @@ var Game = {
       this.currentScreen.enter();
       this.refresh();
     }
-  }  
+  }
 };
 
 window.addEventListener('load', function() {
