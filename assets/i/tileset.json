@@ -1,6 +1,6 @@
 {"frames": {
 
-"crate":
+"7drl2016_18":
 {
 	"frame": {"x":0,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -9,7 +9,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"dugeast":
+"crate":
 {
 	"frame": {"x":34,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -18,7 +18,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"dugnorth":
+"crate_blast":
 {
 	"frame": {"x":68,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -27,7 +27,43 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"dugsouth":
+"crate_blocks":
+{
+	"frame": {"x":102,"y":0,"w":34,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
+	"sourceSize": {"w":34,"h":34},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"crate_cross":
+{
+	"frame": {"x":136,"y":0,"w":34,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
+	"sourceSize": {"w":34,"h":34},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"crate_decoy":
+{
+	"frame": {"x":170,"y":0,"w":34,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
+	"sourceSize": {"w":34,"h":34},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"crate_enemy":
+{
+	"frame": {"x":204,"y":0,"w":34,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
+	"sourceSize": {"w":34,"h":34},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"crate_fall":
 {
 	"frame": {"x":0,"y":34,"w":34,"h":34},
 	"rotated": false,
@@ -36,7 +72,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"dugwest":
+"crate_unknown":
 {
 	"frame": {"x":34,"y":34,"w":34,"h":34},
 	"rotated": false,
@@ -45,7 +81,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"energy":
+"datachip":
 {
 	"frame": {"x":68,"y":34,"w":34,"h":34},
 	"rotated": false,
@@ -54,7 +90,43 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"playerbot":
+"dugeast":
+{
+	"frame": {"x":102,"y":34,"w":34,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
+	"sourceSize": {"w":34,"h":34},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"dugnorth":
+{
+	"frame": {"x":136,"y":34,"w":34,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
+	"sourceSize": {"w":34,"h":34},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"dugsouth":
+{
+	"frame": {"x":170,"y":34,"w":34,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
+	"sourceSize": {"w":34,"h":34},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"dugwest":
+{
+	"frame": {"x":204,"y":34,"w":34,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
+	"sourceSize": {"w":34,"h":34},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"energy":
 {
 	"frame": {"x":0,"y":68,"w":34,"h":34},
 	"rotated": false,
@@ -63,7 +135,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"skullbot":
+"playerbot":
 {
 	"frame": {"x":34,"y":68,"w":34,"h":34},
 	"rotated": false,
@@ -72,9 +144,27 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"skullbot_spiky":
+"skullbot":
 {
 	"frame": {"x":68,"y":68,"w":34,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
+	"sourceSize": {"w":34,"h":34},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"skullbot_spiky":
+{
+	"frame": {"x":102,"y":68,"w":34,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
+	"sourceSize": {"w":34,"h":34},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"wall":
+{
+	"frame": {"x":136,"y":68,"w":34,"h":34},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
@@ -86,8 +176,8 @@
 	"version": "1.0",
 	"image": "tileset.png",
 	"format": "RGBA8888",
-	"size": {"w":102,"h":102},
+	"size": {"w":238,"h":102},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:f10610532ceac4779c5e6eca245064f4:a19fd1df63d059aab383b89f9db152a2:ace0e5e82375743ccde85e973fd84fb5$"
+	"smartupdate": "$TexturePacker:SmartUpdate:a6593c544f3f00787c22594ef2529858:931551987793ec879d46c94c7f625f2f:ace0e5e82375743ccde85e973fd84fb5$"
 }
 }

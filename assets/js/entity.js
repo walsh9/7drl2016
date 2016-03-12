@@ -8,6 +8,7 @@ Game.Entity = {
     this.frustration = 0;
     this.boilingPoint = options.boilingPoint || 40;
     this.isAngry = false;
+    this.unknown = options.unknown || false;
     this.tile    = options.tile    || "error";
     this.color   = options.color   || 0xffffff;
     this.speed   = options.speed   || 1000;

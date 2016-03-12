@@ -12,6 +12,8 @@ Game.Entity.actions.playerDie = function (killer) {
 };
 
 Game.Entity.actions.botDie = function (killer) {
+  var loot = Object.create(Game.Item).init(Game.Item.templates.datachip);
+  this.map.addItem(this.x, this.y, loot);
   this.map.removeEntity(this);
   console.log(killer.tile, 'killed', this.tile);
 };

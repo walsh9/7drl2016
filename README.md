@@ -6,7 +6,7 @@
 - [ ] Win state  
 - [ ] Title  
 - [ ] Multiple levels  
-- [ ] Enemies drop key items  
+- [x] Enemies drop key items  
 - [x] Player can get pickups  
 - [ ] Show status (item count, current levels)  
 - [ ] Player can continue to next levels  
