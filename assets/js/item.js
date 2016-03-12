@@ -10,6 +10,6 @@ Game.Item = {
     return this;
   },
   collect: function() {
-    return this.map.removeItem(this.x, this.y);
+    return this.map.removeItem(this);
   }
 };

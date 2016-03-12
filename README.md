@@ -7,7 +7,7 @@
 - [ ] Title  
 - [ ] Multiple levels  
 - [ ] Enemies drop key items  
-- [ ] Player can get pickups  
+- [x] Player can get pickups  
 - [ ] Show status (item count, current levels)  
 - [ ] Player can continue to next levels  
 - [ ] Smarter Enemies  

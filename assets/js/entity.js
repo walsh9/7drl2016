@@ -3,6 +3,7 @@ Game.Entity = {
     options      = options         || {};
     this.x       = x               || 0;
     this.y       = y               || 0;
+    this.items   = {};
     this.tile    = options.tile    || "error";
     this.color   = options.color   || 0xffffff;
     this.speed   = options.speed   || 1000;

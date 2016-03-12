@@ -115,7 +115,18 @@ Game.Screen.playScreen = {
       var newX = this.player.x + dX;
       var newY = this.player.y + dY;
       // Try to move to the new cell
-      this.player.tryMove(newX, newY, this.player.map);
+      if (this.player.tryMove(newX, newY, this.player.map)) {
+        //collect items
+        var item = this.player.map.itemAt(newX, newY);
+        if (item) {
+          var itemname = item.collect();
+          if (this.player.items[itemname]) {
+            this.player.items[itemname] += 1;
+          } else {
+            this.player.items[itemname] = 1;
+          }
+        }
+      }
   },
 };
 
