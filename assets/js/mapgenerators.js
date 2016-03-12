@@ -22,19 +22,19 @@ Game.Map.Generators.Basic = {
     var targetCell, n;
     var enemyCount = 4;
     var crateCount = 6;
-    for (n = 0; n < enemyCount; n++) {
-      targetCell = map.randomEmpty();
-      if (!targetCell) {break;}
-      var enemy = Object.create(Game.Entity).init(Game.Entity.templates.skullbot);
-      map.addEntity(enemy);
-      enemy.setPosition(targetCell.x, targetCell.y, map);
-    }
     for (n = 0; n < crateCount; n++) {
       targetCell = map.randomStable();
       if (!targetCell) {break;}
       var crate = Object.create(Game.Entity).init(Game.Entity.templates.crate);
       map.addEntity(crate);
       crate.setPosition(targetCell.x, targetCell.y, map);
+    }
+    for (n = 0; n < enemyCount; n++) {
+      targetCell = map.randomEmpty();
+      if (!targetCell) {break;}
+      var enemy = Object.create(Game.Entity).init(Game.Entity.templates.skullbot);
+      map.addEntity(enemy);
+      enemy.setPosition(targetCell.x, targetCell.y, map);
     }
     return map;
   },

@@ -9,10 +9,14 @@ Game.Entity = {
     this.canTunnel  = options.canTunnel  || false;
     this.canDig     = options.canDig     || false;
     this.canPhase   = options.canPhase   || false;
+    this.canCrush   = options.canCrush   || false;
+    this.canPush    = options.canPush    || false;
+    this.canKill    = options.canKill    || false;
     this.isFalling  = options.isFalling  || false;
     this.isPushable = options.isPushable || false;
     this.isPlayer   = options.isPlayer   || false;
     this.action = options.action || Game.Entity.actions.nullAction;
+    this.dies   = options.dies   || Game.Entity.actions.nullAction;
     this.map = null;
     return this;
   },
@@ -35,24 +39,31 @@ Game.Entity = {
     var oldY = this.y;
     var thisCell = this.cellHere();
     var targetCell = this.map.grid.getCell(x, y);
-    if (this.map.unoccupiedAt(x, y)) {
-      if (thisCell.linked(targetCell)) {
-        this.setPosition(x, y, map);
-        return true;
-      } else if (targetCell.dug && this.canTunnel) {
-        thisCell.link(targetCell);
-        this.setPosition(x, y, map);  
-      } else if (!targetCell.dug && this.canDig) {
-        targetCell.dug = true;
-        thisCell.link(targetCell);
-        this.setPosition(x, y, map);  
-      }
-    } else {
+    if (targetCell) {
       var target = this.map.entityAt(x, y);
-      if (target.isPushable){
-        var pushX = x + (x - oldX);
-        var pushY = y + (y - oldY);
-        target.tryMove(pushX, pushY, map);
+      if (target) { // Bump logic
+        if (this.tile == "crate") {console.log(this, target, oldY);}
+        if (this.canPush && target.isPushable && target.y == oldY) {
+          var pushX = x + (x - oldX);
+          var pushY = y + (y - oldY);
+          target.tryMove(pushX, pushY, map);
+        } else if (this.canKill || this.canCrush && target.y == oldY + 1) {
+          target.kill(this);
+        }
+      }
+      if (this.map.unoccupiedAt(x, y)) { // Moving into unoccupied cell
+        if (thisCell.linked(targetCell)) {
+          return this.setPosition(x, y, map);
+        } else if (targetCell.dug && this.canTunnel) {
+          thisCell.link(targetCell);
+          return this.setPosition(x, y, map);  
+        } else if (!targetCell.dug && this.canDig) {
+          targetCell.dug = true;
+          thisCell.link(targetCell);
+          return this.setPosition(x, y, map);  
+        } else if (this.canPhase) {
+          return this.setPosition(x, y, map);
+        }
       }
     }
     return false;
@@ -61,6 +72,15 @@ Game.Entity = {
     return this.speed;
   },
   act: function() {
+    var entity = this;
     this.action.call(this);
+    this.map.engine.lock();
+    setTimeout(function() {
+      entity.map.engine.unlock();
+      Game.refresh();
+    }, 50);
+  },
+  kill: function() {
+    this.dies.call(this);
   }
 };
