@@ -1,8 +1,8 @@
 Game.Entity = {
-  init: function(options) {
+  init: function(options, x, y) {
     options      = options         || {};
-    this.x       = options.x       || 0;
-    this.y       = options.y       || 0;
+    this.x       = x               || 0;
+    this.y       = y               || 0;
     this.tile    = options.tile    || "error";
     this.color   = options.color   || "#ffffff";
     this.speed   = options.speed   || 1000;

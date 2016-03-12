@@ -44,6 +44,7 @@ Game.Screen.playScreen = {
   },
   render: function(display) {
     this.renderTiles(display);
+    this.renderItems(display);
     this.renderEntities(display);
     Game.display.render(Game.stage);
   },
@@ -69,6 +70,12 @@ Game.Screen.playScreen = {
     for (var key in this.map.entities) {
       var entity = this.map.entities[key];
       Game.Screen.drawTile(Game.stage, entity.tile, {x: entity.x, y: entity.y} );
+    }
+  },
+  renderItems: function(display) {
+    for (var key in this.map.items) {
+      var item = this.map.items[key];
+      Game.Screen.drawTile(Game.stage, item.tile, {x: item.x, y: item.y} );
     }
   },
   handleInput: function(inputType, inputData) {

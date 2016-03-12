@@ -3,6 +3,7 @@ Game.Map = {
     this.grid = grid;
     this.color = 0xaaaaff;
     this.entities = {};
+    this.items = {};
     this.scheduler = new ROT.Scheduler.Speed();
     this.engine = new ROT.Engine(this.scheduler);
     return this;
@@ -35,7 +36,7 @@ Game.Map = {
       return !cell.dug && 
         cell.south && 
         !cell.south.dug && 
-        map.entityAt(cell.x, cell.y) === undefined;
+        map.unoccupiedAt(cell.x, cell.y);
     });
   },
   addEntity: function(entity) {
@@ -44,7 +45,6 @@ Game.Map = {
     if (entity.isPlayer) {
         this.player = entity;
     }
-    this.scheduler.add(entity, true);
   },
   removeEntity: function(entity) {
     var key = entity.x + ',' + entity.y;
@@ -52,6 +52,30 @@ Game.Map = {
         delete this.entities[key];
     }
     this.scheduler.remove(entity);
+  },
+  addItem: function(x, y, item) {
+    item.map = this;
+    item.x = x;
+    item.y = y;
+    var key = x + ',' + y;
+    if (this.items[key]) {
+      var neighbors = item.map.grid.getCell(x,y).neighbors();
+      neighbors.some(function () {
+        item.map.addItem(item);
+      }, item.map);
+    } else {
+      this.items[key] = item;
+      return true;
+    }
+  },
+  removeItem: function(item) {
+    var key = item.x + ',' + item.y;
+    if (this.items[key] == item) {
+        var name = item.name;
+        delete this.items[key];
+        return name;
+    }
+    return null;
   },
   updateEntityPosition: function(entity, oldX, oldY) {
     if (typeof oldX === 'number') {
@@ -69,6 +93,9 @@ Game.Map = {
         throw new Error('Tried to add an entity at an occupied position.');
     }
     this.entities[key] = entity;
+  },
+  itemAt: function(x, y){
+    return this.items[x + ',' + y];
   },
   entityAt: function(x, y){
     return this.entities[x + ',' + y];

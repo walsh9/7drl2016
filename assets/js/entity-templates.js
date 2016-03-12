@@ -83,3 +83,7 @@ Game.Entity.templates.skullbot = {
   action: Game.Entity.actions.randomWalk,
   dies: Game.Entity.actions.botDie
 };
+
+Game.Entity.templates.tempEnergy = {
+  tile: "energy",
+};
