@@ -42,7 +42,6 @@ Game.Entity = {
     if (targetCell) {
       var target = this.map.entityAt(x, y);
       if (target) { // Bump logic
-        if (this.tile == "crate") {console.log(this, target, oldY);}
         if (this.canPush && target.isPushable && target.y == oldY) {
           var pushX = x + (x - oldX);
           var pushY = y + (y - oldY);

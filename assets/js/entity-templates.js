@@ -72,7 +72,6 @@ Game.Entity.templates.crate = {
   canPush:    true,
   canPhase:   true,
   isPushable: true,
-  speed: 1000,
   action: Game.Entity.actions.fall,
   //dies: Game.Entity.actions.botDie
 };
