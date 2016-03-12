@@ -32,7 +32,6 @@ Game.Pathfinder = {
     var here = this.pathmap.getCell(x, y);
     hereMap =  this.grid.getCell(x, y);
     var pathfinder = this;
-    console.log(here);
     var approachCell = here; // default if unreachable
     if (approachCell.distance) {
       here.neighbors().forEach( function(neighbor) {

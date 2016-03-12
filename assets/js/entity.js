@@ -1,9 +1,13 @@
 Game.Entity = {
   init: function(options, x, y) {
     options      = options         || {};
+    this.defaultTemplate = options || {};
     this.x       = x               || 0;
     this.y       = y               || 0;
     this.items   = {};
+    this.frustration = 0;
+    this.boilingPoint = options.boilingPoint || 40;
+    this.isAngry = false;
     this.tile    = options.tile    || "error";
     this.color   = options.color   || 0xffffff;
     this.speed   = options.speed   || 1000;
@@ -16,6 +20,7 @@ Game.Entity = {
     this.isFalling  = options.isFalling  || false;
     this.isPushable = options.isPushable || false;
     this.isPlayer   = options.isPlayer   || false;
+    this.angryForm  = options.angryForm   || {};
     this.action = options.action || Game.Entity.actions.nullAction;
     this.dies   = options.dies   || Game.Entity.actions.nullAction;
     this.map = null;
@@ -73,6 +78,27 @@ Game.Entity = {
   },
   getSpeed: function() {
     return this.speed;
+  },
+  getAngry: function() {
+    this.isAngry = true;
+    Object.assign(this, this.angryForm);
+  },
+  frustrate: function(n) {
+    this.frustration += n;
+    if (this.frustration > this.boilingPoint) {
+      this.getAngry();
+    }
+  },
+  relax: function(n) {
+    this.frustration -= n;
+    if (this.frustration < 0) {
+      this.calmDown();
+    }
+  },
+  calmDown: function() {
+    this.frustration = 0;
+    this.isAngry = false;
+    Object.assign(this, this.defaultTemplate);
   },
   act: function() {
     var entity = this;

@@ -31,14 +31,19 @@ Game.Entity.actions.seekPlayer = function () {
             (entity.canPhase)
           );
   });
-  console.log(pathfinder.pathmap.grid);
   var targetCell = pathfinder.getApproachFrom(entity.x, entity.y);
   return this.tryMove(targetCell.x, targetCell.y, this.map);
 };
 
 Game.Entity.actions.botMove = function () {
+  if (this.isAngry) {
+   this.relax(5);
+  } else {
+    this.frustrate(1);
+  }
   if (!Game.Entity.actions.seekPlayer.call(this)) {
     Game.Entity.actions.randomWalk.call(this);
+    this.frustrate(2);
   }
 };
 

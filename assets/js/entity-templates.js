@@ -21,9 +21,22 @@ Game.Entity.templates.crate = {
   //dies: Game.Entity.actions.botDie
 };
 
-Game.Entity.templates.skullbot = {
-  tile: "skullbot",
-  canKill: true,
+Game.Entity.templates.angrySkullBot = {
+  tile: "skullbot_spiky",
+  color: 0xff0000,
+  canDig: true,
+  canTunnel: true,
   action: Game.Entity.actions.botMove,
   dies: Game.Entity.actions.botDie
+};
+
+Game.Entity.templates.skullbot = {
+  tile: "skullbot",
+  color: 0xffffff,
+  canDig: false,
+  canTunnel: false,
+  canKill: true,
+  action: Game.Entity.actions.botMove,
+  dies: Game.Entity.actions.botDie,
+  angryForm: Game.Entity.templates.angrySkullBot
 };
