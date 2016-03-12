@@ -45,6 +45,7 @@ Game.Map = {
     if (entity.isPlayer) {
         this.player = entity;
     }
+    this.scheduler.add(entity, true);
   },
   removeEntity: function(entity) {
     var key = entity.x + ',' + entity.y;
