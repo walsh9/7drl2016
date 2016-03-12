@@ -21,7 +21,7 @@ Game.Map.Generators.Basic = {
   populate: function(map) {
     var targetCell, n;
     var enemyCount = 4;
-    var crateCount = 10;
+    var crateCount = 8;
     for (n = 0; n < crateCount; n++) {
       targetCell = map.randomStable();
       if (!targetCell) {break;}

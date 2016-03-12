@@ -35,6 +35,9 @@ Game.Entity = {
     return this.map.grid.getCell(this.x, this.y);
   },
   tryMove: function(x, y, map) {
+    if (this.x === x && this.y === y) {
+      return false;
+    }
     //Check for valid moves, pushes, do other things
     var oldX = this.x;
     var oldY = this.y;
@@ -78,9 +81,9 @@ Game.Entity = {
     setTimeout(function() {
       entity.map.engine.unlock();
       Game.refresh();
-    }, 50);
+    }, 0);
   },
-  kill: function() {
-    this.dies.call(this);
+  kill: function(killer) {
+    this.dies.call(this, killer);
   }
 };

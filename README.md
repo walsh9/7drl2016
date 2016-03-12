@@ -10,7 +10,7 @@
 - [x] Player can get pickups  
 - [ ] Show status (item count, current levels)  
 - [ ] Player can continue to next levels  
-- [ ] Smarter Enemies  
+- [x] Smarter Enemies  
 - [ ] More Enemies  
 - [ ] More Interesting Map Generation  
 - [ ] Randomized Crate Effects  

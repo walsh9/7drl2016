@@ -4,7 +4,7 @@ Game.Map = {
     this.color = 0xaaaaff;
     this.entities = {};
     this.items = {};
-    this.scheduler = new ROT.Scheduler.Speed();
+    this.scheduler = new ROT.Scheduler.Simple();
     this.engine = new ROT.Engine(this.scheduler);
     return this;
   },
