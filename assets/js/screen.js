@@ -1,8 +1,9 @@
 Game.Screen = {};
 
-Game.Screen.drawTile = function(container, tileIndex, pos) {
+Game.Screen.drawTile = function(container, tileIndex, pos, color) {
       var textures = PIXI.loader.resources["assets/i/tileset.json"].textures;
       var tile = new PIXI.Sprite(textures[tileIndex]);
+      tile.tint = color || 0xFFFFFF;
       tile.position.x = pos.x * Game.tileSize.x;
       tile.position.y = pos.y * Game.tileSize.y;
       container.addChild(tile);
@@ -69,13 +70,13 @@ Game.Screen.playScreen = {
   renderEntities: function(display) {
     for (var key in this.map.entities) {
       var entity = this.map.entities[key];
-      Game.Screen.drawTile(Game.stage, entity.tile, {x: entity.x, y: entity.y} );
+      Game.Screen.drawTile(Game.stage, entity.tile, {x: entity.x, y: entity.y}, entity.color );
     }
   },
   renderItems: function(display) {
     for (var key in this.map.items) {
       var item = this.map.items[key];
-      Game.Screen.drawTile(Game.stage, item.tile, {x: item.x, y: item.y} );
+      Game.Screen.drawTile(Game.stage, item.tile, {x: item.x, y: item.y}, item.color );
     }
   },
   handleInput: function(inputType, inputData) {
