@@ -5,8 +5,9 @@ Game.Crates = {
     this.colors = Game.Crates.colors.randomize();
     this.crates = Game.Crates.types.randomize();
   },
-  random: function() {
-    return Math.floor(ROT.RNG.getUniform() * this.crates.length);
+  random: function(limit) {
+    limit = limit || this.crates.length - 1;
+    return Math.floor(ROT.RNG.getUniform() * limit);
   },
   getTile: function(index) {
     if (this.crates[index].known) {
@@ -61,9 +62,9 @@ Game.Crates.actions.explode = function(x, y, map, crateId) {
                    {x: x - 1, y: y + 1}, {x: x, y: y + 1}, {x: x + 1, y: y + 1}];
   console.log('BOOM');
   function blastCell(pos) {
+    Game.Screen.addEffect("boom", pos, 0xffffff, 300);
     var cell = map.grid.getCell(pos.x, pos.y);
     if (cell) {
-      Game.Screen.addEffect("boom", pos, 0xffffff, 200);
       var target = map.entityAt(cell.x, cell.y);
       if (target) {
         target.kill('explosion');
@@ -85,7 +86,51 @@ Game.Crates.actions.explode = function(x, y, map, crateId) {
   blastZone.forEach(blastCell);
   Game.display.render(Game.stage);
   blastZone.forEach(cleanUp);
+};
 
+
+
+Game.Crates.actions.laserBlast = function(x, y, map, crateId) {
+  var blastZone = [                   {x: x, y: y - 2},
+                                      {x: x, y: y - 1},
+  {x: x - 2, y: y}, {x: x - 1, y: y}, {x: x, y: y}, {x: x + 1, y: y}, {x: x + 2, y: y},
+                                      {x: x, y: y + 1},
+                                      {x: x, y: y + 2}];
+  var zapcolor = 0xffffff;
+  var zapduration = 300;
+  Game.Screen.addEffect("laser_top", blastZone[0], zapcolor, zapduration);
+  Game.Screen.addEffect("laser_vertical", blastZone[1], zapcolor, zapduration);
+  Game.Screen.addEffect("laser_left", blastZone[2], zapcolor, zapduration);
+  Game.Screen.addEffect("laser_horizontal", blastZone[3], zapcolor, zapduration);
+  Game.Screen.addEffect("laser_center", blastZone[4], zapcolor, zapduration);
+  Game.Screen.addEffect("laser_horizontal", blastZone[5], zapcolor, zapduration);
+  Game.Screen.addEffect("laser_right", blastZone[6], zapcolor, zapduration);
+  Game.Screen.addEffect("laser_vertical", blastZone[7], zapcolor, zapduration);
+  Game.Screen.addEffect("laser_bottom", blastZone[8], zapcolor, zapduration);
+  function blastCell(pos) {
+    var cell = map.grid.getCell(pos.x, pos.y);
+    if (cell) {
+      var target = map.entityAt(cell.x, cell.y);
+      if (target) {
+        target.kill('explosion');
+      }
+      cell.blasted = true;
+      cell.neighbors().forEach(function(neighbor){ //link to blasted neigbors
+        if (neighbor.blasted && !cell.linked(neighbor)) {
+          cell.link(neighbor);
+        }
+      });
+    }
+  }
+  function cleanUp(pos) {
+    var cell = map.grid.getCell(pos.x, pos.y);
+    if (cell) {
+      cell.blasted = undefined;
+    }
+  }
+  blastZone.forEach(blastCell);
+  Game.display.render(Game.stage);
+  blastZone.forEach(cleanUp);
 };
 
 Game.Crates.types = [
@@ -105,10 +150,10 @@ Game.Crates.types = [
     tile: "crate_enemy",
     action: Game.Crates.actions.createEnemy   
   },{
-    name: "wall",
+    name: "laser",
     known: false,
-    tile: "crate_blocks",
-    action: function() {}    
+    tile: "crate_cross",
+    action: Game.Crates.actions.laserBlast
   },{
     name: "dig",
     known: false,

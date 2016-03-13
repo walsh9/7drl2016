@@ -1,17 +1,49 @@
 Game.Map.Generators.Basic = {
   create: function(width, height) {
-    var linkTarget = {};
     var grid = Object.create(Game.Grid).init(width, height);
     var map = Object.create(Game.Map).init(grid);
-    var cell = map.grid.randomCell();
+    return map;
+  },
+  placeWalls: function(map) {
+    for(var y = 0; y < map.grid.height; y++) {
+      map.grid.getCell(0, y).impassable = true;
+      map.grid.getCell(map.grid.width - 1, y).impassable = true;
+    }
+    for(var x = 0; x < map.grid.width; x++) {
+      map.grid.getCell(x, 0).impassable = true;
+      map.grid.getCell(x, map.grid.height - 1).impassable = true;
+    }
+    return map;
+  },
+  placeItems: function(map) {
+    var energyCount = 10;
+    var energy;
+    var pos = map.randomPristine();
+    for(var n = 0; n < energyCount; n++) {
+      energy = Object.create(Game.Item).init(Game.Item.templates.energy);
+      map.addItem(pos.x, pos.y, energy);
+    }
+    pos = map.randomPristine();
+    for(n = 0; n < energyCount; n++) {
+      energy = Object.create(Game.Item).init(Game.Item.templates.energy);
+      map.addItem(pos.x, pos.y, energy);
+    }
+
+    return(map);
+  },
+  digPaths: function(map) {
+    var linkTarget = {};
+    var cell = map.randomPristine();
     for (var linkCount = 0; linkCount < 100; linkCount++) {
-      var undugNeighbors = cell.neighbors().filter(function(cell) {return !cell.dug;});
+      var undugNeighbors = cell.neighbors().filter(function(cell) {
+        return !cell.dug && !map.itemAt(cell.x, cell.y);
+      });
       linkTarget = undugNeighbors[Math.floor(ROT.RNG.getUniform() * (undugNeighbors.length))];
       if (linkTarget && ROT.RNG.getUniform() < 0.90) {
         cell.link(linkTarget);
         cell = linkTarget;
       } else {
-        cell = map.randomUndug();
+        cell = map.randomPristine();
         if (!cell) {return map;}
       }
     }
@@ -34,11 +66,6 @@ Game.Map.Generators.Basic = {
       if (!targetCell) {break;}
       var enemy = Object.create(Game.Entity).init(Game.Entity.templates.skullbot, targetCell.x, targetCell.y);
       map.addEntity(enemy);
-    }
-    var energyCount = 15;
-    for(n = 0; n < energyCount; n++) {
-      var energy = Object.create(Game.Item).init(Game.Item.templates.energy);
-      map.addItem(5,5, energy);
     }
     return map;
   },

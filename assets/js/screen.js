@@ -49,9 +49,13 @@ Game.Screen.playScreen = {
   newLevel: function(level) {
     var width = Game.mapSize.x;
     var height = Game.mapSize.y;
-    this.map = Game.Map.Generators.Basic.create(width, height);
-    Game.Map.Generators.Basic.populate(this.map);
-    Game.Map.Generators.Basic.addPlayer(this.map, this.player);
+    var generator = Game.Map.Generators.Basic;
+    this.map = generator.create(width, height);
+    generator.placeWalls(this.map);
+    generator.placeItems(this.map);
+    generator.digPaths(this.map);
+    generator.populate(this.map);
+    generator.addPlayer(this.map, this.player);
     this.grid = this.map.grid;
     this.map.engine.start();
   },
@@ -72,7 +76,9 @@ Game.Screen.playScreen = {
       var x = cell.x;
       var y = cell.y;
       var pos = {x: x, y: y};
-      if (cell.dug) {
+      if (cell.impassable) {
+        Game.Screen.drawTile(container, "wall", pos);
+      } else if (cell.dug) {
         if (cell.east  && cell.east.dug && cell.linked(cell.east))  { Game.Screen.drawTile(container, "dugeast", pos); }
         if (cell.west  && cell.west.dug && cell.linked(cell.west))  { Game.Screen.drawTile(container, "dugwest", pos); }
         if (cell.north && cell.north.dug && cell.linked(cell.north)) { Game.Screen.drawTile(container, "dugnorth", pos); }

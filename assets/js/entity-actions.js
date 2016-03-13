@@ -41,7 +41,7 @@ Game.Entity.actions.seekPlayer = function () {
             (entity.canTunnel && there.dug) ||
             (entity.canDig) || // and diggable
             (entity.canPhase)
-          );
+          ) && !there.impassable;
   });
   var targetCell = pathfinder.getApproachFrom(entity.x, entity.y);
   return this.tryMove(targetCell.x, targetCell.y, this.map);
@@ -62,7 +62,7 @@ Game.Entity.actions.botMove = function () {
 Game.Entity.actions.fall = function () {
   var targetCell = this.cellHere().south;
   if (this.falling > 0) {  // falling
-    if (targetCell && (targetCell.dug || this.canDig)) { // falling further
+    if (targetCell && !targetCell.impassable && (targetCell.dug || this.canDig)) { // falling further
       var fell = this.tryMove(targetCell.x, targetCell.y, this.map);
       if (fell) {
         this.falling += 1;
@@ -75,7 +75,7 @@ Game.Entity.actions.fall = function () {
       }
     }
   } else {
-    if (targetCell && targetCell.dug && this.map.unoccupiedAt(targetCell.x, targetCell.y) &&
+    if (targetCell && !targetCell.impassable && targetCell.dug && this.map.unoccupiedAt(targetCell.x, targetCell.y) &&
        (this.tryMove(targetCell.x, targetCell.y, this.map))) {
         this.falling = 1;
     } else {

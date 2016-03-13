@@ -49,7 +49,7 @@ Game.Entity = {
     var oldY = this.y;
     var thisCell = this.cellHere();
     var targetCell = this.map.grid.getCell(x, y);
-    if (targetCell) {
+    if (targetCell && !targetCell.impassable) {
       var target = this.map.entityAt(x, y);
       if (target) { // Bump logic
         if (this.canPush && target.isPushable && target.y == oldY) {

@@ -18,17 +18,24 @@ Game.Map = {
     var map = this;
     return this.find(function(cell) {
       return cell.dug && 
+      !cell.impassable &&
       map.unoccupiedAt(cell.x, cell.y);
     });
   },
   randomDug: function() {
     return this.find(function(cell) {
-      return cell.dug;
+      return cell.dug && !cell.impassable;
     });
   },
   randomUndug: function() {
     return this.find(function(cell) {
-      return !cell.dug;
+      return !cell.dug && !cell.impassable;
+    });
+  },
+  randomPristine: function() {
+    var map = this;
+    return this.find(function(cell) {
+      return (!cell.dug && !map.itemAt(cell.x, cell.y) && !cell.impassable);
     });
   },
   randomStable: function() {
@@ -37,6 +44,8 @@ Game.Map = {
       return !cell.dug && 
         cell.south && 
         !cell.south.dug && 
+        cell.y < map.grid.height - 5 &&
+        !cell.impassable && 
         map.unoccupiedAt(cell.x, cell.y);
     });
   },
@@ -71,7 +80,8 @@ Game.Map = {
       while (frontier.length > 0) {
         current = frontier.shift();
         current.neighbors().some( function(neighbor) {
-          if (neighbor.searched === undefined) {
+          if (neighbor.searched === undefined && 
+              !item.map.grid.getCell(neighbor.x, neighbor.y).impassable) {
             key = neighbor.x + ',' + neighbor.y;
             if (!item.map.items[key]) {
               item.x = neighbor.x;

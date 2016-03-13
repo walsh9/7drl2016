@@ -65,6 +65,7 @@ var Cell = {
     this.y = y;
     this.diggable = true;
     this.dug = false;
+    this.impassable = false;
     this.links = [];
     return this;
   },
@@ -95,11 +96,15 @@ var Cell = {
     if (this.south) { list.push(this.south); }
     if (this.east) { list.push(this.east); }
     if (this.west) { list.push(this.west); }
-    return list.randomize();
+    return list.filter( function(neighbor) {
+      return (neighbor.impassable === false);
+    }).randomize();
   },
   randomLink: function() {
     if (this.links.length > 0) {
-      return this.links.random();
+      return this.links.filter( function(cell) {
+      return !cell.impassable;
+    }).random();
     }
     return null;
   }
