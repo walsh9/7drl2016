@@ -1,7 +1,8 @@
 Game.Map.Generators.Basic = {
-  create: function(width, height) {
+  create: function(width, height, options) {
+    this.options = options || {};
     var grid = Object.create(Game.Grid).init(width, height);
-    var map = Object.create(Game.Map).init(grid);
+    var map = Object.create(Game.Map).init(grid, options);
     return map;
   },
   placeWalls: function(map) {
@@ -13,22 +14,31 @@ Game.Map.Generators.Basic = {
       map.grid.getCell(x, 0).impassable = true;
       map.grid.getCell(x, map.grid.height - 1).impassable = true;
     }
+
+    var doorPositions = [{x:1, y:0}, {x:map.grid.width - 2, y:0}].randomize();
+
+    var energyDoor = Object.create(Game.Entity).init(Game.Entity.templates.energyDoor, doorPositions[0].x, doorPositions[0].y);
+    var datachipDoor = Object.create(Game.Entity).init(Game.Entity.templates.datachipDoor, doorPositions[1].x, doorPositions[1].y); 
+    map.addEntity(energyDoor);
+    map.addEntity(datachipDoor);
+    map.energyDoor   = energyDoor;
+    map.datachipDoor = datachipDoor;
     return map;
   },
   placeItems: function(map) {
-    var energyCount = 10;
-    var energy;
+    var energyCount = this.options.energy;
+    var energySpread = this.options.energySpread;
     var pos = map.randomPristine();
-    for(var n = 0; n < energyCount; n++) {
-      energy = Object.create(Game.Item).init(Game.Item.templates.energy);
-      map.addItem(pos.x, pos.y, energy);
+    while (energyCount > 0) {
+      for(var n = 0; n < energySpread; n++) {
+        if (energyCount > 0) {
+          energy = Object.create(Game.Item).init(Game.Item.templates.energy);
+          map.addItem(pos.x, pos.y, energy);
+          energyCount--;
+        }
+      }
+      pos = map.randomPristine();
     }
-    pos = map.randomPristine();
-    for(n = 0; n < energyCount; n++) {
-      energy = Object.create(Game.Item).init(Game.Item.templates.energy);
-      map.addItem(pos.x, pos.y, energy);
-    }
-
     return(map);
   },
   digPaths: function(map) {
@@ -51,20 +61,28 @@ Game.Map.Generators.Basic = {
     return map;
   },
   populate: function(map) {
-    var targetCell, n;
-    var enemyCount = 4;
-    var crateCount = 8;
+    var targetCell, n, enemy, crate;
+    var hunterCount  = this.options.hunters;
+    var stalkerCount = this.options.stalkers;
+    var crateCount = this.options.crates;
+    var crateTypes = this.options.crateTypes;
     for (n = 0; n < crateCount; n++) {
       targetCell = map.randomStable();
       if (!targetCell) {break;}
-      var crate = Object.create(Game.Entity).init(Game.Entity.templates.crate, targetCell.x, targetCell.y);
-      crate.crateType = Game.Crates.random();
+      crate = Object.create(Game.Entity).init(Game.Entity.templates.crate, targetCell.x, targetCell.y);
+      crate.crateType = Game.Crates.random(crateTypes);
       map.addEntity(crate);
     }
-    for (n = 0; n < enemyCount; n++) {
+    for (n = 0; n < hunterCount; n++) {
       targetCell = map.randomEmpty();
       if (!targetCell) {break;}
-      var enemy = Object.create(Game.Entity).init(Game.Entity.templates.skullbot, targetCell.x, targetCell.y);
+      enemy = Object.create(Game.Entity).init(Game.Entity.templates.skullbot, targetCell.x, targetCell.y);
+      map.addEntity(enemy);
+    }
+    for (n = 0; n < stalkerCount; n++) {
+      targetCell = map.randomEmpty();
+      if (!targetCell) {break;}
+      enemy = Object.create(Game.Entity).init(Game.Entity.templates.spookbot, targetCell.x, targetCell.y);
       map.addEntity(enemy);
     }
     return map;

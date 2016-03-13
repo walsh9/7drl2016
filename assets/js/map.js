@@ -1,7 +1,8 @@
 Game.Map = {
-  init: function(grid) {
+  init: function(grid, options) {
     this.grid = grid;
-    this.color = 0xaaaaff;
+    this.options = options || {};
+    this.color = options.color || 0xaaaaff;
     this.entities = {};
     this.items = {};
     this.targets = [];
@@ -101,9 +102,9 @@ Game.Map = {
   removeItem: function(item) {
     var key = item.x + ',' + item.y;
     if (this.items[key] == item) {
-        var name = item.name;
-        delete this.items[key];
-        return name;
+      var name = item.name;
+      delete this.items[key];
+      return name;
     }
     return null;
   },
@@ -120,6 +121,7 @@ Game.Map = {
     }
     var key = entity.x + ',' + entity.y;
     if (this.entities[key]) {
+      console.log(this);
         throw new Error('Tried to add an entity at an occupied position.');
     }
     this.entities[key] = entity;

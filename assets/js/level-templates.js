@@ -1,0 +1,43 @@
+Game.levels = [
+  {
+    color: 0x004d40,
+    energy: 15,
+    energyNeeded: 15,
+    energySpread: 5,
+    stalkers: 3,
+    hunters: 0,
+    datachipsNeeded: 3,
+    crateTypes: 2,
+    crates: 6,
+  },{
+    color: 0x00695c,
+    energy: 20,
+    energyNeeded: 20,
+    energySpread: 5,
+    stalkers: 4,
+    hunters: 0,
+    datachipsNeeded: 4,
+    crateTypes: 3,
+    crates: 6,
+  },{
+    color: 0x00796b,
+    energy: 20,
+    energyNeeded: 20,
+    energySpread: 5,
+    stalkers: 0,
+    hunters: 3,
+    datachipsNeeded: 3,
+    crateTypes: 3,
+    crates: 6,
+  },{
+    color: 0x00897b,
+    energy: 25,
+    energyNeeded: 25,
+    energySpread: 5,
+    stalkers: 2,
+    hunters: 2,
+    datachipsNeeded: 4,
+    crateTypes: 4,
+    crates: 6,
+  }
+];

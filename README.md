@@ -5,11 +5,11 @@
 - [ ] Lose state  
 - [ ] Win state  
 - [ ] Title  
-- [ ] Multiple levels  
+- [x] Multiple levels  
 - [x] Enemies drop key items  
 - [x] Player can get pickups  
-- [ ] Show status (item count, current levels)  
-- [ ] Player can continue to next levels  
+- [x] Show status (item count, current levels)  
+- [x] Player can continue to next levels  
 - [x] Smarter Enemies  
 - [ ] More Enemies  
 - [ ] More Interesting Map Generation  

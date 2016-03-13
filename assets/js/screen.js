@@ -16,7 +16,7 @@ Game.Screen.drawTile = function(container, tileIndex, pos, color) {
       var tile = new PIXI.Sprite(textures[tileIndex]);
       tile.tint = color || 0xFFFFFF;
       tile.position.x = pos.x * Game.tileSize.x;
-      tile.position.y = pos.y * Game.tileSize.y;
+      tile.position.y = (pos.y + 2) * Game.tileSize.y;
       container.addChild(tile);
 };
 
@@ -46,11 +46,18 @@ Game.Screen.playScreen = {
   exit: function() { 
     console.log("Exited play screen."); 
   },
+  nextLevel: function() {
+    this.level += 1;
+    this.newLevel(this.level);
+  },
   newLevel: function(level) {
     var width = Game.mapSize.x;
     var height = Game.mapSize.y;
+    this.levelOptions = Game.levels[level - 1];
     var generator = Game.Map.Generators.Basic;
-    this.map = generator.create(width, height);
+    this.map = generator.create(width, height, this.levelOptions);
+    this.player.items.energy = 0;
+    this.player.items.datachip = 0;
     generator.placeWalls(this.map);
     generator.placeItems(this.map);
     generator.digPaths(this.map);
@@ -64,20 +71,21 @@ Game.Screen.playScreen = {
     this.renderItems(display);
     this.renderEntities(display);
     this.renderEffects(display);
+    this.renderStatus(display);
     Game.display.render(Game.stage);
   },
   renderTiles: function(display) {
     Game.display.backgroundColor = this.map.color;
+    var map = this.map;
     this.map.grid.eachCell( function(cell) {
       drawCell(Game.stage, cell);
     });
-
     function drawCell(container, cell) {
       var x = cell.x;
       var y = cell.y;
       var pos = {x: x, y: y};
       if (cell.impassable) {
-        Game.Screen.drawTile(container, "wall", pos);
+        Game.Screen.drawTile(container, "wall", pos, map.color);
       } else if (cell.dug) {
         if (cell.east  && cell.east.dug && cell.linked(cell.east))  { Game.Screen.drawTile(container, "dugeast", pos); }
         if (cell.west  && cell.west.dug && cell.linked(cell.west))  { Game.Screen.drawTile(container, "dugwest", pos); }
@@ -85,6 +93,34 @@ Game.Screen.playScreen = {
         if (cell.south && cell.south.dug && cell.linked(cell.south)) { Game.Screen.drawTile(container, "dugsouth", pos); }
       }
     }
+  },
+  renderStatus: function(display) {
+    var graphics = new PIXI.Graphics();
+    graphics.beginFill(0x000000);
+    graphics.drawRect(0, 0, Game.stage.width, Game.tileSize.y * 2);
+    Game.stage.addChild(graphics);
+
+    var levelLabel = new PIXI.Text("STAGE " + this.level, {font:"20px Audiowide", fill:"white"});
+    levelLabel.x = Game.stage.width - 10;
+    levelLabel.y = 2;
+    levelLabel.anchor.set(1, 0);
+    Game.stage.addChild(levelLabel);
+
+    Game.Screen.drawTile(Game.stage, Game.Item.templates.energy.tile, {x: 0, y: -2}, Game.Item.templates.energy.color );
+    Game.Screen.drawTile(Game.stage, Game.Item.templates.datachip.tile, {x: 0, y: -1}, Game.Item.templates.datachip.color );
+    
+    var energyCounter = new PIXI.Text("x " + this.player.items.energy + " / " + this.levelOptions.energyNeeded, 
+      {font:"20px Audiowide", fill:"white"});
+    energyCounter.x = Game.tileSize.x;
+    energyCounter.y = 2;
+    Game.stage.addChild(energyCounter);
+
+    var datachipCounter = new PIXI.Text("x " + this.player.items.datachip + " / " + this.levelOptions.datachipsNeeded, 
+      {font:"20px Audiowide", fill:"white"});
+    datachipCounter.x = Game.tileSize.x;
+    datachipCounter.y = Game.tileSize.y + 2;
+    Game.stage.addChild(datachipCounter);
+
   },
   renderEntities: function(display) {
     for (var key in this.map.entities) {
@@ -150,6 +186,21 @@ Game.Screen.playScreen = {
             this.player.items[itemname] += 1;
           } else {
             this.player.items[itemname] = 1;
+          }
+          var doorPos;
+          if (this.map.energyDoor && this.player.items.energy >= this.levelOptions.energyNeeded) {
+            doorPos = {x: this.map.energyDoor.x, y: this.map.energyDoor.y};
+            this.map.removeEntity(this.map.energyDoor);
+            this.map.energyDoor = undefined;
+            var openEnergyDoor = Object.create(Game.Entity).init(Game.Entity.templates.openEnergyDoor, doorPos.x, doorPos.y);
+            this.map.addEntity(openEnergyDoor);
+          }
+          if (this.map.datachipDoor && this.player.items.datachip >= this.levelOptions.datachipsNeeded) {
+            doorPos = {x: this.map.datachipDoor.x, y: this.map.datachipDoor.y};
+            this.map.removeEntity(this.map.datachipDoor);
+            this.map.datachipDoor = undefined;
+            var openDatachipDoor = Object.create(Game.Entity).init(Game.Entity.templates.openDatachipDoor, doorPos.x, doorPos.y);
+            this.map.addEntity(openDatachipDoor);
           }
         }
       }

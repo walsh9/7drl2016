@@ -21,9 +21,10 @@ Game.Entity = {
     this.isFalling  = options.isFalling  || false;
     this.isPushable = options.isPushable || false;
     this.isPlayer   = options.isPlayer   || false;
-    this.angryForm  = options.angryForm   || {};
-    this.action = options.action || Game.Entity.actions.nullAction;
-    this.dies   = options.dies   || Game.Entity.actions.nullAction;
+    this.angryForm  = options.angryForm  || {};
+    this.action    = options.action     || Game.Entity.actions.nullAction;
+    this.dies      = options.dies       || Game.Entity.actions.nullAction;
+    this.activate  = options.activate   || Game.Entity.actions.nullAction;
     this.map = null;
     return this;
   },
@@ -43,6 +44,10 @@ Game.Entity = {
   tryMove: function(x, y, map) {
     if (this.x === x && this.y === y) {
       return false;
+    }
+    if (this.isPlayer && this.map.entityAt(x, y)) {
+      console.log('beep',this.map.entityAt(x, y));
+      this.map.entityAt(x, y).activate.call(null, this);
     }
     //Check for valid moves, pushes, do other things
     var oldX = this.x;

@@ -5,7 +5,7 @@ var Game = {
   tileSize: {x: 34, y: 34},
   mapSize: {x: 13, y: 15},
   init: function() {
-    this.display = PIXI.autoDetectRenderer(Game.mapSize.x * Game.tileSize.x, Game.mapSize.y * Game.tileSize.y);
+    this.display = PIXI.autoDetectRenderer(Game.mapSize.x * Game.tileSize.x, (Game.mapSize.y + 2) * Game.tileSize.y);
     document.body.appendChild(this.display.view);
     this.stage = new PIXI.Container();
     this.switchScreen(Game.Screen.playScreen);

@@ -91,7 +91,8 @@ Game.Entity.actions.crateBreak = function (killer) {
     var map = this.map;
     var crateType = this.crateType;
     this.map.removeEntity(this);
-    if (crateType) {
+    console.log(this);
+    if (crateType !== undefined) {
       Game.Crates.doAction(crateType, x, y, map);
       Game.Crates.identify(crateType);
     }
@@ -101,7 +102,13 @@ Game.Entity.actions.crateBreak = function (killer) {
 
 Game.Entity.actions.randomWalk = function () {
   var targetCell = this.cellHere().randomLink();
-  this.tryMove(targetCell.x, targetCell.y, this.map);
+  if (targetCell) {
+    this.tryMove(targetCell.x, targetCell.y, this.map);
+  }
+};
+
+Game.Entity.actions.gotoNextLevel = function () {
+  Game.currentScreen.nextLevel();
 };
 
 Game.Entity.actions.nullAction = function() {};

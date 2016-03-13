@@ -90,7 +90,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"dugeast":
+"door_locked":
 {
 	"frame": {"x":340,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -99,7 +99,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"dugnorth":
+"door_open":
 {
 	"frame": {"x":374,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -108,7 +108,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"dugsouth":
+"dugeast":
 {
 	"frame": {"x":408,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -117,7 +117,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"dugwest":
+"dugnorth":
 {
 	"frame": {"x":442,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -126,7 +126,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"energy":
+"dugsouth":
 {
 	"frame": {"x":476,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -135,7 +135,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"laser_bottom":
+"dugwest":
 {
 	"frame": {"x":510,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -144,7 +144,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"laser_center":
+"energy":
 {
 	"frame": {"x":544,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -153,7 +153,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"laser_horizontal":
+"laser_bottom":
 {
 	"frame": {"x":578,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -162,7 +162,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"laser_left":
+"laser_center":
 {
 	"frame": {"x":612,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -171,7 +171,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"laser_right":
+"laser_horizontal":
 {
 	"frame": {"x":646,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -180,7 +180,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"laser_top":
+"laser_left":
 {
 	"frame": {"x":680,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -189,7 +189,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"laser_vertical":
+"laser_right":
 {
 	"frame": {"x":714,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -198,7 +198,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"playerbot":
+"laser_top":
 {
 	"frame": {"x":748,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -207,7 +207,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"skullbot":
+"laser_vertical":
 {
 	"frame": {"x":782,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -216,7 +216,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"skullbot_spiky":
+"playerbot":
 {
 	"frame": {"x":816,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -225,7 +225,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"spookbot":
+"skullbot":
 {
 	"frame": {"x":850,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -234,7 +234,7 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"spookbot_phasing":
+"skullbot_spiky":
 {
 	"frame": {"x":884,"y":0,"w":34,"h":34},
 	"rotated": false,
@@ -243,9 +243,27 @@
 	"sourceSize": {"w":34,"h":34},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"wall":
+"spookbot":
 {
 	"frame": {"x":918,"y":0,"w":34,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
+	"sourceSize": {"w":34,"h":34},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"spookbot_phasing":
+{
+	"frame": {"x":952,"y":0,"w":34,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
+	"sourceSize": {"w":34,"h":34},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"wall":
+{
+	"frame": {"x":986,"y":0,"w":34,"h":34},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":34},
@@ -257,8 +275,8 @@
 	"version": "1.0",
 	"image": "tileset.png",
 	"format": "RGBA8888",
-	"size": {"w":952,"h":34},
+	"size": {"w":1020,"h":34},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:dee77fb5a0cb17ae91686339c2d1eb6a:2c19fdfb73f6a41058c964df3f57be8f:ace0e5e82375743ccde85e973fd84fb5$"
+	"smartupdate": "$TexturePacker:SmartUpdate:019d838f8569b1ed4df04654629e1187:86bcb9e005b02439d776e77b05a44005:ace0e5e82375743ccde85e973fd84fb5$"
 }
 }
