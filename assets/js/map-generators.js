@@ -49,5 +49,6 @@ Game.Map.Generators.Basic = {
     player.x = playerPosition.x;
     player.y = playerPosition.y;
     map.addEntity(player);
+    map.targets = [player];
   }
 };

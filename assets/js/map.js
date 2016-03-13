@@ -4,6 +4,7 @@ Game.Map = {
     this.color = 0xaaaaff;
     this.entities = {};
     this.items = {};
+    this.targets = [];
     this.scheduler = new ROT.Scheduler.Simple();
     this.engine = new ROT.Engine(this.scheduler);
     return this;
@@ -55,14 +56,15 @@ Game.Map = {
     this.scheduler.remove(entity);
   },
   addItem: function(x, y, item) {
+    
     item.map = this;
     item.x = x;
     item.y = y;
     var key = x + ',' + y;
     if (this.items[key]) {
       var neighbors = item.map.grid.getCell(x,y).neighbors();
-      neighbors.some(function () {
-        item.map.addItem(item);
+      neighbors.some(function (neighbor) {
+         item.map.addItem(neighbor.x, neighbor.y, item);
       }, item.map);
     } else {
       this.items[key] = item;

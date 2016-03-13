@@ -18,7 +18,7 @@ Game.Entity.templates.crate = {
   canPhase:   true,
   isPushable: true,
   action: Game.Entity.actions.fall,
-  dies: Game.Entity.actions.crateDie
+  dies: Game.Entity.actions.crateBreak
 };
 
 Game.Entity.templates.angrySkullBot = {
@@ -39,4 +39,10 @@ Game.Entity.templates.skullbot = {
   action: Game.Entity.actions.botMove,
   dies: Game.Entity.actions.botDie,
   angryForm: Game.Entity.templates.angrySkullBot
+};
+
+Game.Entity.templates.decoy = {
+  tile: "playerbot",
+  color: 0x29ADFF,
+  dies: Game.Entity.actions.decoyDie,
 };

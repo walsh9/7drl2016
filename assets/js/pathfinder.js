@@ -3,17 +3,17 @@ Game.Pathfinder = {
     this.grid = grid;
     this.passable = passabilityFunction;
     this.pathmap = Object.create(grid).init(grid.width, grid.height);
-    this.floodFill(target.x, target.y, 0);
+    this.bfsMap(target.x, target.y, 0);
     return this;
   },
   update: function(grid, target) {
     this.grid = grid;
-    this.floodFill(target.x, target.y);
+    this.bfsMap(target.x, target.y);
   },
-  floodFill: function(x, y) {
+  bfsMap: function(x, y) {
     var here = this.grid.getCell(x, y);
     var pathfinder = this;
-    this.pathmap.getCell(x,y).distance = 0 ;
+    this.pathmap.getCell(x,y).distance = 1 ;
     var frontier = [here];
     while (frontier.length > 0) {
       currentCell = frontier.shift();

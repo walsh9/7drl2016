@@ -5,10 +5,20 @@ Game.Entity.actions.playerAction = function () {
   Game.refresh();
   this.map.engine.lock();
   this.acting = false;
+  console.log(this.map.targets);
 };
 
 Game.Entity.actions.playerDie = function (killer) {
   console.log('GAME OVER');
+};
+
+Game.Entity.actions.die = function (killer) {
+  this.map.removeEntity(this);
+};
+
+Game.Entity.actions.decoyDie = function (killer) {
+  this.map.targets.pop();
+  this.map.removeEntity(this);
 };
 
 Game.Entity.actions.botDie = function (killer) {
@@ -25,7 +35,8 @@ Game.Entity.actions.randomWalk = function () {
 
 Game.Entity.actions.seekPlayer = function () {
   var entity = this;
-  var pathfinder = Object.create(Game.Pathfinder).init(entity.map.grid, entity.map.player,
+  var target = entity.map.targets.slice(-1)[0];
+  var pathfinder = Object.create(Game.Pathfinder).init(entity.map.grid, target,
   function passable(here, there) {
     return ((here.linked(there)) || 
             (entity.canTunnel && there.dug) ||
@@ -74,11 +85,16 @@ Game.Entity.actions.fall = function () {
   }
 };
 
-Game.Entity.actions.crateDie = function (killer) {
+Game.Entity.actions.crateBreak = function (killer) {
   console.log(killer.tile, 'killed', this.tile);  
   if (killer === this) {
-    Game.Crates.identify(this.crateType);
+    var x = this.x;
+    var y = this.y;
+    var map = this.map;
+    var crateType = this.crateType;
     this.map.removeEntity(this);
+    Game.Crates.doAction(crateType, x, y, map);
+    Game.Crates.identify(crateType);
   }
 };
 
