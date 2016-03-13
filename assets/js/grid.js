@@ -95,11 +95,11 @@ var Cell = {
     if (this.south) { list.push(this.south); }
     if (this.east) { list.push(this.east); }
     if (this.west) { list.push(this.west); }
-    return list;
+    return list.randomize();
   },
   randomLink: function() {
     if (this.links.length > 0) {
-      return this.links[Math.floor(ROT.RNG.getUniform() * (this.links.length))];
+      return this.links.random();
     }
     return null;
   }

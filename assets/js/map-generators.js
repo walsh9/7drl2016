@@ -35,12 +35,10 @@ Game.Map.Generators.Basic = {
       var enemy = Object.create(Game.Entity).init(Game.Entity.templates.skullbot, targetCell.x, targetCell.y);
       map.addEntity(enemy);
     }
-    var rect = {x: 1, y: 1, w: 5, h: 2};
-     for(var y = 0; y < rect.h; y++) {
-      for(var x = 0; x < rect.w; x++) {
-        var energy = Object.create(Game.Item).init(Game.Item.templates.energy);
-        map.addItem(x + rect.x, y + rect.y, energy);
-      }
+    var energyCount = 15;
+    for(n = 0; n < energyCount; n++) {
+      var energy = Object.create(Game.Item).init(Game.Item.templates.energy);
+      map.addItem(5,5, energy);
     }
     return map;
   },

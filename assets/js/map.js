@@ -56,19 +56,37 @@ Game.Map = {
     this.scheduler.remove(entity);
   },
   addItem: function(x, y, item) {
-    
     item.map = this;
     item.x = x;
     item.y = y;
     var key = x + ',' + y;
-    if (this.items[key]) {
-      var neighbors = item.map.grid.getCell(x,y).neighbors();
-      neighbors.some(function (neighbor) {
-         item.map.addItem(neighbor.x, neighbor.y, item);
-      }, item.map);
-    } else {
+    if (!this.items[key]) { // no item here, put it down
       this.items[key] = item;
-      return true;
+    } else { // oh boy...
+      var grid = this.grid;
+      var itemOverflowMap = Object.create(grid).init(grid.width, grid.height);
+      var here = itemOverflowMap.getCell(x, y);
+      here.searched = true;
+      var frontier = [here];
+      while (frontier.length > 0) {
+        current = frontier.shift();
+        current.neighbors().some( function(neighbor) {
+          if (neighbor.searched === undefined) {
+            key = neighbor.x + ',' + neighbor.y;
+            if (!item.map.items[key]) {
+              item.x = neighbor.x;
+              item.y = neighbor.y;
+              item.map.items[key] = item;
+              console.log(neighbor);
+              frontier = [];
+              return true;
+            } else {
+              neighbor.searched = true;
+              frontier.push(neighbor);
+            }
+          }
+        }, this);
+      }
     }
   },
   removeItem: function(item) {

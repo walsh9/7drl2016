@@ -16,7 +16,7 @@
 - [x] Randomized Crate Effects  
 - [ ] | Bomb  
 - [ ] | Wall  
-- [ ] | Create Decoy  
+- [x] | Create Decoy  
 - [ ] | Create Enemies  
 - [ ] | Tunnel to bottom  
 - [ ] | ???? MORE ???? 
