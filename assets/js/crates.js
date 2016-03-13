@@ -47,7 +47,12 @@ Game.Crates.actions.createDigCrate = function(x, y, map, crateId) {
   digCrate.color = Game.Crates.getColor(crateId);
   map.addEntity(digCrate);
   digCrate.falling = 2;
-  map.targets.push(digCrate);
+  digCrate.act();
+};
+
+Game.Crates.actions.createEnemy = function(x, y, map, crateId) {
+  var enemy = Object.create(Game.Entity).init(Game.Entity.templates.skullbot, x, y);
+  map.addEntity(enemy);
 };
 
 Game.Crates.types = [
@@ -65,7 +70,7 @@ Game.Crates.types = [
     name: "enemy",
     known: false,
     tile: "crate_enemy",
-    action: function() {}    
+    action: Game.Crates.actions.createEnemy   
   },{
     name: "wall",
     known: false,

@@ -17,8 +17,8 @@
 - [ ] | Bomb  
 - [ ] | Wall  
 - [x] | Create Decoy  
-- [ ] | Create Enemies  
-- [ ] | Tunnel to bottom  
+- [x] | Create Enemies  
+- [x] | Tunnel to bottom  
 - [ ] | ???? MORE ???? 
 
 ## Low Priority
