@@ -22,7 +22,7 @@ Game.Crates = {
     this.crates[index].known = true;
   },
   doAction: function(index, x, y, map) {
-    this.crates[index].action.call(null, x, y, map);
+    this.crates[index].action.call(null, x, y, map, index);
   }
 };
 
@@ -36,10 +36,18 @@ Game.Crates.colors = [
 
 Game.Crates.actions = {};
 
-Game.Crates.actions.createDecoy = function(x, y, map) {
+Game.Crates.actions.createDecoy = function(x, y, map, crateId) {
   var decoy = Object.create(Game.Entity).init(Game.Entity.templates.decoy, x, y);
   map.addEntity(decoy);
   map.targets.push(decoy);
+};
+
+Game.Crates.actions.createDigCrate = function(x, y, map, crateId) {
+  var digCrate = Object.create(Game.Entity).init(Game.Entity.templates.digCrate, x, y);
+  digCrate.color = Game.Crates.getColor(crateId);
+  map.addEntity(digCrate);
+  digCrate.falling = 2;
+  map.targets.push(digCrate);
 };
 
 Game.Crates.types = [
@@ -67,6 +75,6 @@ Game.Crates.types = [
     name: "dig",
     known: false,
     tile: "crate_fall",
-    action: function() {}    
+    action: Game.Crates.actions.createDigCrate  
   }
 ];

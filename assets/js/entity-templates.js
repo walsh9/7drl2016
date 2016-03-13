@@ -21,6 +21,19 @@ Game.Entity.templates.crate = {
   dies: Game.Entity.actions.crateBreak
 };
 
+Game.Entity.templates.digCrate = {
+  tile: "crate_fall",
+  canTunnel:  true,
+  canDig:     true,
+  canCrush:   true,
+  canPush:    true,
+  canPhase:   true,
+  isPushable: true,
+  action: Game.Entity.actions.fall,
+  dies: Game.Entity.actions.crateBreak
+};
+
+
 Game.Entity.templates.angrySkullBot = {
   tile: "skullbot_spiky",
   color: 0xff0000,
@@ -44,5 +57,6 @@ Game.Entity.templates.skullbot = {
 Game.Entity.templates.decoy = {
   tile: "playerbot",
   color: 0x29ADFF,
+  canPush:    true,
   dies: Game.Entity.actions.decoyDie,
 };

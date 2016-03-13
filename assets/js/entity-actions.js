@@ -63,7 +63,7 @@ Game.Entity.actions.botMove = function () {
 Game.Entity.actions.fall = function () {
   var targetCell = this.cellHere().south;
   if (this.falling > 0) {  // falling
-    if (targetCell && targetCell.dug) { // falling further
+    if (targetCell && (targetCell.dug || this.canDig)) { // falling further
       var fell = this.tryMove(targetCell.x, targetCell.y, this.map);
       if (fell) {
         this.falling += 1;
@@ -93,8 +93,10 @@ Game.Entity.actions.crateBreak = function (killer) {
     var map = this.map;
     var crateType = this.crateType;
     this.map.removeEntity(this);
-    Game.Crates.doAction(crateType, x, y, map);
-    Game.Crates.identify(crateType);
+    if (crateType) {
+      Game.Crates.doAction(crateType, x, y, map);
+      Game.Crates.identify(crateType);
+    }
   }
 };
 
