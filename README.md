@@ -14,7 +14,7 @@
 - [ ] More Enemies  
 - [ ] More Interesting Map Generation  
 - [x] Randomized Crate Effects  
-- [ ] | Bomb  
+- [x] | Bomb  
 - [ ] | Wall  
 - [x] | Create Decoy  
 - [x] | Create Enemies  

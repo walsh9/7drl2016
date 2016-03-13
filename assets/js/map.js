@@ -77,7 +77,6 @@ Game.Map = {
               item.x = neighbor.x;
               item.y = neighbor.y;
               item.map.items[key] = item;
-              console.log(neighbor);
               frontier = [];
               return true;
             } else {

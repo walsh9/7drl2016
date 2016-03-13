@@ -1,5 +1,16 @@
 Game.Screen = {};
 
+Game.Screen.effects = {};
+
+Game.Screen.addEffect = function(tile, pos, color, time) {
+  var key = pos.x + "," + pos.y;
+  Game.Screen.effects[key] = {x: pos.x, y: pos.y, tile: tile, color: color};
+  setTimeout(function() { 
+    delete Game.Screen.effects[key]; 
+    Game.refresh();
+  }, time);
+};
+
 Game.Screen.drawTile = function(container, tileIndex, pos, color) {
       var textures = PIXI.loader.resources["assets/i/tileset.json"].textures;
       var tile = new PIXI.Sprite(textures[tileIndex]);
@@ -48,6 +59,7 @@ Game.Screen.playScreen = {
     this.renderTiles(display);
     this.renderItems(display);
     this.renderEntities(display);
+    this.renderEffects(display);
     Game.display.render(Game.stage);
   },
   renderTiles: function(display) {
@@ -80,6 +92,13 @@ Game.Screen.playScreen = {
       Game.Screen.drawTile(Game.stage, item.tile, {x: item.x, y: item.y}, item.color );
     }
   },
+  renderEffects: function(display) {
+    for (var key in Game.Screen.effects) {
+      var effect = Game.Screen.effects[key];
+      Game.Screen.drawTile(Game.stage, effect.tile, {x: effect.x, y: effect.y}, effect.color );
+    }
+  },
+
   handleInput: function(inputType, inputData) {
       // If the game is over, enter will bring the user to the losing screen.
     if (inputType === 'keydown') {

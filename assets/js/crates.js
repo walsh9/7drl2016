@@ -9,7 +9,7 @@ Game.Crates = {
     return Math.floor(ROT.RNG.getUniform() * this.crates.length);
   },
   getTile: function(index) {
-    if (this.crates[index].known) {
+    if (this.crates[index].known || true) {
       return this.crates[index].tile;
     } else {
       return "crate_unknown";
@@ -55,6 +55,39 @@ Game.Crates.actions.createEnemy = function(x, y, map, crateId) {
   map.addEntity(enemy);
 };
 
+Game.Crates.actions.explode = function(x, y, map, crateId) {
+  var blastZone = [{x: x - 1, y: y - 1}, {x: x, y: y - 1}, {x: x + 1, y: y - 1},
+                   {x: x - 1, y: y},     {x: x, y: y},     {x: x + 1, y: y},
+                   {x: x - 1, y: y + 1}, {x: x, y: y + 1}, {x: x + 1, y: y + 1}];
+  console.log('BOOM');
+  function blastCell(pos) {
+    var cell = map.grid.getCell(pos.x, pos.y);
+    if (cell) {
+      Game.Screen.addEffect("boom", pos, 0xffffff, 200);
+      var target = map.entityAt(cell.x, cell.y);
+      if (target) {
+        target.kill('explosion');
+      }
+      cell.blasted = true;
+      cell.neighbors().forEach(function(neighbor){ //link to blasted neigbors
+        if (neighbor.blasted && !cell.linked(neighbor)) {
+          cell.link(neighbor);
+        }
+      });
+    }
+  }
+  function cleanUp(pos) {
+    var cell = map.grid.getCell(pos.x, pos.y);
+    if (cell) {
+      cell.blasted = undefined;
+    }
+  }
+  blastZone.forEach(blastCell);
+  Game.display.render(Game.stage);
+  blastZone.forEach(cleanUp);
+
+};
+
 Game.Crates.types = [
   {
     name: "decoy",
@@ -65,7 +98,7 @@ Game.Crates.types = [
     name: "exploding",
     known: false,
     tile: "crate_blast",
-    action: function() {}    
+    action: Game.Crates.actions.explode    
   },{
     name: "enemy",
     known: false,

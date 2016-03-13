@@ -5,7 +5,6 @@ Game.Entity.actions.playerAction = function () {
   Game.refresh();
   this.map.engine.lock();
   this.acting = false;
-  console.log(this.map.targets);
 };
 
 Game.Entity.actions.playerDie = function (killer) {
@@ -86,8 +85,7 @@ Game.Entity.actions.fall = function () {
 };
 
 Game.Entity.actions.crateBreak = function (killer) {
-  console.log(killer.tile, 'killed', this.tile);  
-  if (killer === this) {
+  if (killer === this || killer === 'explosion') {
     var x = this.x;
     var y = this.y;
     var map = this.map;
