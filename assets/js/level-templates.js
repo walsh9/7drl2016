@@ -1,6 +1,6 @@
 Game.levels = [
   {
-    color: 0x004d40,
+    color: 0x283593,
     energy: 15,
     energyNeeded: 15,
     energySpread: 5,
@@ -10,7 +10,7 @@ Game.levels = [
     crateTypes: 2,
     crates: 6,
   },{
-    color: 0x00695c,
+    color: 0x303f9f,
     energy: 20,
     energyNeeded: 20,
     energySpread: 5,
@@ -20,7 +20,7 @@ Game.levels = [
     crateTypes: 3,
     crates: 6,
   },{
-    color: 0x00796b,
+    color: 0x3949ab,
     energy: 20,
     energyNeeded: 20,
     energySpread: 5,
@@ -30,7 +30,7 @@ Game.levels = [
     crateTypes: 3,
     crates: 6,
   },{
-    color: 0x00897b,
+    color: 0x3f51b5,
     energy: 25,
     energyNeeded: 25,
     energySpread: 5,
@@ -38,6 +38,36 @@ Game.levels = [
     hunters: 2,
     datachipsNeeded: 4,
     crateTypes: 4,
+    crates: 6,
+  },{
+    color: 0x5c6bc0,
+    energy: 25,
+    energyNeeded: 25,
+    energySpread: 5,
+    stalkers: 2,
+    hunters: 2,
+    datachipsNeeded: 4,
+    crateTypes: 5,
+    crates: 6,
+  },{
+    color: 0x7986cb,
+    energy: 25,
+    energyNeeded: 25,
+    energySpread: 5,
+    stalkers: 2,
+    hunters: 2,
+    datachipsNeeded: 4,
+    crateTypes: 5,
+    crates: 6,
+  },{
+    color: 0x9FA8DA,
+    energy: 25,
+    energyNeeded: 25,
+    energySpread: 5,
+    stalkers: 2,
+    hunters: 2,
+    datachipsNeeded: 4,
+    crateTypes: 5,
     crates: 6,
   }
 ];

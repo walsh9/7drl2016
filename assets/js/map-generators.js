@@ -43,9 +43,17 @@ Game.Map.Generators.Basic = {
   },
   digPaths: function(map) {
     var linkTarget = {};
-    var cell = map.randomPristine();
-    for (var linkCount = 0; linkCount < 100; linkCount++) {
-      var undugNeighbors = cell.neighbors().filter(function(cell) {
+    var cell = map.grid.getCell(Math.floor(map.grid.width / 2), map.grid.height - 2);
+    var undugNeighbors = cell.neighbors().filter(function(cell) {
+      return !cell.dug;
+    });
+    if (linkTarget) {
+    linkTarget = undugNeighbors[Math.floor(ROT.RNG.getUniform() * (undugNeighbors.length))];
+      cell.link(linkTarget);
+      cell = linkTarget;
+    }
+    for (var linkCount = 0; linkCount < 80; linkCount++) {
+      undugNeighbors = cell.neighbors().filter(function(cell) {
         return !cell.dug && !map.itemAt(cell.x, cell.y);
       });
       linkTarget = undugNeighbors[Math.floor(ROT.RNG.getUniform() * (undugNeighbors.length))];
@@ -57,7 +65,6 @@ Game.Map.Generators.Basic = {
         if (!cell) {return map;}
       }
     }
-    console.log(map);
     return map;
   },
   populate: function(map) {
@@ -88,9 +95,8 @@ Game.Map.Generators.Basic = {
     return map;
   },
   addPlayer: function(map, player) {
-    var playerPosition = map.randomEmpty();
-    player.x = playerPosition.x;
-    player.y = playerPosition.y;
+    player.x = Math.floor(map.grid.width / 2);
+    player.y = map.grid.height - 2;
     map.addEntity(player);
     map.targets = [player];
   }

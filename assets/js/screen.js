@@ -59,10 +59,10 @@ Game.Screen.playScreen = {
     this.player.items.energy = 0;
     this.player.items.datachip = 0;
     generator.placeWalls(this.map);
+    generator.addPlayer(this.map, this.player);
     generator.placeItems(this.map);
     generator.digPaths(this.map);
     generator.populate(this.map);
-    generator.addPlayer(this.map, this.player);
     this.grid = this.map.grid;
     this.map.engine.start();
   },
@@ -100,26 +100,41 @@ Game.Screen.playScreen = {
     graphics.drawRect(0, 0, Game.stage.width, Game.tileSize.y * 2);
     Game.stage.addChild(graphics);
 
-    var levelLabel = new PIXI.Text("STAGE " + this.level, {font:"20px Audiowide", fill:"white"});
-    levelLabel.x = Game.stage.width - 10;
-    levelLabel.y = 2;
-    levelLabel.anchor.set(1, 0);
-    Game.stage.addChild(levelLabel);
+    if (this.gameEnded) {
+      var gameOverLabel = new PIXI.Text("GAME OVER", {font:"30px Audiowide", fill:"white"});
+      gameOverLabel.x = Game.stage.width / 2;
+      gameOverLabel.y = 0;
+      gameOverLabel.anchor.set(0.5, 0);
+      Game.stage.addChild(gameOverLabel);
 
-    Game.Screen.drawTile(Game.stage, Game.Item.templates.energy.tile, {x: 0, y: -2}, Game.Item.templates.energy.color );
-    Game.Screen.drawTile(Game.stage, Game.Item.templates.datachip.tile, {x: 0, y: -1}, Game.Item.templates.datachip.color );
-    
-    var energyCounter = new PIXI.Text("x " + this.player.items.energy + " / " + this.levelOptions.energyNeeded, 
-      {font:"20px Audiowide", fill:"white"});
-    energyCounter.x = Game.tileSize.x;
-    energyCounter.y = 2;
-    Game.stage.addChild(energyCounter);
+      var pressKeyLabel = new PIXI.Text("Press any key to restart.", {font:"20px Audiowide", fill:"white"});
+      pressKeyLabel.x = Game.stage.width / 2;
+      pressKeyLabel.y = Game.tileSize.y;
+      pressKeyLabel.anchor.set(0.5, 0);
+      Game.stage.addChild(pressKeyLabel);
 
-    var datachipCounter = new PIXI.Text("x " + this.player.items.datachip + " / " + this.levelOptions.datachipsNeeded, 
-      {font:"20px Audiowide", fill:"white"});
-    datachipCounter.x = Game.tileSize.x;
-    datachipCounter.y = Game.tileSize.y + 2;
-    Game.stage.addChild(datachipCounter);
+    } else {
+      var levelLabel = new PIXI.Text("STAGE " + this.level, {font:"20px Audiowide", fill:"white"});
+      levelLabel.x = Game.stage.width - 10;
+      levelLabel.y = 2;
+      levelLabel.anchor.set(1, 0);
+      Game.stage.addChild(levelLabel);
+
+      Game.Screen.drawTile(Game.stage, Game.Item.templates.energy.tile, {x: 0, y: -2}, Game.Item.templates.energy.color );
+      Game.Screen.drawTile(Game.stage, Game.Item.templates.datachip.tile, {x: 0, y: -1}, Game.Item.templates.datachip.color );
+      
+      var energyCounter = new PIXI.Text("x " + this.player.items.energy + " / " + this.levelOptions.energyNeeded, 
+        {font:"20px Audiowide", fill:"white"});
+      energyCounter.x = Game.tileSize.x;
+      energyCounter.y = 2;
+      Game.stage.addChild(energyCounter);
+
+      var datachipCounter = new PIXI.Text("x " + this.player.items.datachip + " / " + this.levelOptions.datachipsNeeded, 
+        {font:"20px Audiowide", fill:"white"});
+      datachipCounter.x = Game.tileSize.x;
+      datachipCounter.y = Game.tileSize.y + 2;
+      Game.stage.addChild(datachipCounter);
+    }
 
   },
   renderEntities: function(display) {
@@ -142,7 +157,11 @@ Game.Screen.playScreen = {
   },
 
   handleInput: function(inputType, inputData) {
-      // If the game is over, enter will bring the user to the losing screen.
+    // If the game is over, enter will bring the user to the losing screen.
+    if (this.gameEnded) {
+      document.location.reload();
+      return;
+    }
     if (inputType === 'keydown') {
       // Movement
       if (inputData.keyCode === ROT.VK_LEFT || 
@@ -165,12 +184,13 @@ Game.Screen.playScreen = {
                  inputData.keyCode === ROT.VK_NUMPAD2 ||
                  inputData.keyCode === ROT.VK_S) {
         this.move(0, 1);
-      } else if (inputData.keyCode === ROT.VK_SPACE || 
-                 inputData.keyCode === ROT.VK_PERIOD) {
-        this.move(0, 0);
+      // } else if (inputData.keyCode === ROT.VK_SPACE || 
+      //            inputData.keyCode === ROT.VK_PERIOD) {
+      //   this.move(0, 0);
+      } else {
+        // Not a valid key
+        return;
       }
-      // Unlock the engine
-      this.player.map.engine.unlock();
     } 
   },
   move: function(dX, dY) {
@@ -203,6 +223,7 @@ Game.Screen.playScreen = {
             this.map.addEntity(openDatachipDoor);
           }
         }
+        this.player.map.engine.unlock();
       }
   },
 };

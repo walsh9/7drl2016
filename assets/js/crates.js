@@ -67,7 +67,7 @@ Game.Crates.actions.explode = function(x, y, map, crateId) {
     if (cell) {
       var target = map.entityAt(cell.x, cell.y);
       if (target) {
-        target.kill('explosion');
+        target.kill({tile:'explosion', niceToBots: false});
       }
       cell.blasted = true;
       cell.neighbors().forEach(function(neighbor){ //link to blasted neigbors

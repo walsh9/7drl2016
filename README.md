@@ -2,7 +2,7 @@
 
 ## Todo List
 
-- [ ] Lose state  
+- [x] Lose state  
 - [ ] Win state  
 - [ ] Title  
 - [x] Multiple levels  
@@ -11,7 +11,7 @@
 - [x] Show status (item count, current levels)  
 - [x] Player can continue to next levels  
 - [x] Smarter Enemies  
-- [ ] More Enemies  
+- [x] More Enemies  
 - [ ] More Interesting Map Generation  
 - [x] Randomized Crate Effects  
 - [x] | Bomb  

@@ -39,6 +39,7 @@ Game.Entity.templates.angrySkullBot = {
   color: 0xff0000,
   canDig: true,
   canTunnel: true,
+  niceToBots: false,
   action: Game.Entity.actions.botMove,
   dies: Game.Entity.actions.botDie
 };
@@ -49,6 +50,7 @@ Game.Entity.templates.skullbot = {
   canDig: false,
   canTunnel: false,
   canKill: true,
+  niceToBots: true,
   action: Game.Entity.actions.botMove,
   dies: Game.Entity.actions.botDie,
   angryForm: Game.Entity.templates.angrySkullBot
@@ -67,6 +69,7 @@ Game.Entity.templates.spookbot = {
   color: 0xffffff,
   canPhase: false,
   canKill: true,
+  niceToBots: true,
   action: Game.Entity.actions.botMove,
   dies: Game.Entity.actions.botDie,
   angryForm: Game.Entity.templates.angrySpookBot

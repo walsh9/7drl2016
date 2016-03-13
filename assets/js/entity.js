@@ -12,6 +12,7 @@ Game.Entity = {
     this.tile    = options.tile    || "error";
     this.color   = options.color   || 0xffffff;
     this.speed   = options.speed   || 1000;
+    this.niceToBots = options.niceToBots || false;
     this.canTunnel  = options.canTunnel  || false;
     this.canDig     = options.canDig     || false;
     this.canPhase   = options.canPhase   || false;
@@ -46,7 +47,6 @@ Game.Entity = {
       return false;
     }
     if (this.isPlayer && this.map.entityAt(x, y)) {
-      console.log('beep',this.map.entityAt(x, y));
       this.map.entityAt(x, y).activate.call(null, this);
     }
     //Check for valid moves, pushes, do other things
