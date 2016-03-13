@@ -53,15 +53,15 @@ Game.Entity.actions.fall = function () {
   var targetCell = this.cellHere().south;
   if (this.falling > 0) {  // falling
     if (targetCell && targetCell.dug) { // falling further
-      if (this.tryMove(targetCell.x, targetCell.y, this.map)) {
+      var fell = this.tryMove(targetCell.x, targetCell.y, this.map);
+      if (fell) {
         this.falling += 1;
       }
-      else { // if only fell one tile, don't break;
-        if (this.falling > 1) {
-          this.kill(this);
-        } else {
-          this.falling = 0;
-        }
+    } else { // if only fell one tile, don't break;
+      if (this.falling > 1) {
+        this.kill(this);
+      } else {
+        this.falling = 0;
       }
     }
   } else {
@@ -73,6 +73,15 @@ Game.Entity.actions.fall = function () {
     }
   }
 };
+
+Game.Entity.actions.crateDie = function (killer) {
+  console.log(killer.tile, 'killed', this.tile);  
+  if (killer === this) {
+    Game.Crates.identify(this.crateType);
+    this.map.removeEntity(this);
+  }
+};
+
 
 Game.Entity.actions.randomWalk = function () {
   var targetCell = this.cellHere().randomLink();

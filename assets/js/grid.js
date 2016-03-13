@@ -35,8 +35,8 @@ Game.Grid = {
     return this.grid[y][x];
   },
   randomCell: function() {
-    var x = Math.floor(ROT.RNG.getUniform() * (this.width - 1));
-    var y = Math.floor(ROT.RNG.getUniform() * (this.height - 1));
+    var x = Math.floor(ROT.RNG.getUniform() * (this.width));
+    var y = Math.floor(ROT.RNG.getUniform() * (this.height));
     return this.getCell(x, y);
   },
   eachCell: function(callback) {

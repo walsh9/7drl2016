@@ -18,7 +18,7 @@ Game.Entity.templates.crate = {
   canPhase:   true,
   isPushable: true,
   action: Game.Entity.actions.fall,
-  //dies: Game.Entity.actions.botDie
+  dies: Game.Entity.actions.crateDie
 };
 
 Game.Entity.templates.angrySkullBot = {

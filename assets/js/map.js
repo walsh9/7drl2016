@@ -11,7 +11,7 @@ Game.Map = {
   find: function(qualifyFunction) {
     var candidates = this.grid.filterCells(qualifyFunction);
     var length = candidates.length;
-    return candidates[Math.floor(ROT.RNG.getUniform() * (length - 1))];
+    return candidates[Math.floor(ROT.RNG.getUniform() * (length))];
   },
   randomEmpty: function() {
     var map = this;

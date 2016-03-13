@@ -26,6 +26,7 @@ Game.Screen.playScreen = {
   gameEnded: false,
   enter: function() {
     this.player = Object.create(Game.Entity).init(Game.Entity.templates.player);
+    Game.Crates.init();
     this.newLevel(this.level);
   },
   everyTurn: function() {
@@ -70,7 +71,7 @@ Game.Screen.playScreen = {
   renderEntities: function(display) {
     for (var key in this.map.entities) {
       var entity = this.map.entities[key];
-      Game.Screen.drawTile(Game.stage, entity.tile, {x: entity.x, y: entity.y}, entity.color );
+      Game.Screen.drawTile(Game.stage, entity.getTile(), {x: entity.x, y: entity.y}, entity.getColor() );
     }
   },
   renderItems: function(display) {

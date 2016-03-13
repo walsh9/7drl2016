@@ -6,7 +6,7 @@ Game.Map.Generators.Basic = {
     var cell = map.grid.randomCell();
     for (var linkCount = 0; linkCount < 100; linkCount++) {
       var undugNeighbors = cell.neighbors().filter(function(cell) {return !cell.dug;});
-      linkTarget = undugNeighbors[Math.floor(ROT.RNG.getUniform() * (undugNeighbors.length - 1))];
+      linkTarget = undugNeighbors[Math.floor(ROT.RNG.getUniform() * (undugNeighbors.length))];
       if (linkTarget && ROT.RNG.getUniform() < 0.90) {
         cell.link(linkTarget);
         cell = linkTarget;
@@ -26,6 +26,7 @@ Game.Map.Generators.Basic = {
       targetCell = map.randomStable();
       if (!targetCell) {break;}
       var crate = Object.create(Game.Entity).init(Game.Entity.templates.crate, targetCell.x, targetCell.y);
+      crate.crateType = Game.Crates.random();
       map.addEntity(crate);
     }
     for (n = 0; n < enemyCount; n++) {

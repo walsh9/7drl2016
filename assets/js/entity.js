@@ -101,6 +101,20 @@ Game.Entity = {
     this.isAngry = false;
     Object.assign(this, this.defaultTemplate);
   },
+  getTile: function() {
+    if (this.crateType === undefined) {
+      return this.tile;
+    } else {
+      return Game.Crates.getTile(this.crateType);
+    }
+  },
+  getColor: function() {
+    if (this.crateType === undefined) {
+      return this.color;
+    } else {
+      return Game.Crates.getColor(this.crateType);
+    }
+  },
   act: function() {
     var entity = this;
     this.action.call(this);
