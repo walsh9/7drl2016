@@ -9,7 +9,7 @@ Game.Crates = {
     return Math.floor(ROT.RNG.getUniform() * this.crates.length);
   },
   getTile: function(index) {
-    if (this.crates[index].known || true) {
+    if (this.crates[index].known) {
       return this.crates[index].tile;
     } else {
       return "crate_unknown";
