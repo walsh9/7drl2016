@@ -19,8 +19,74 @@
   <script src="assets/js/level-templates.js"></script>
   <script src="assets/js/map-generators.js"></script>
   <script src="assets/js/screen.js"></script>
+  <style type="text/css">
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background: #1A237E;
+  }
+  h1 {
+    text-align: center;
+    font-family: Audiowide, sans-serif;
+    font-size: 30px;
+    color: white;
+    margin: 20px 0;
+  }
+  h2 {
+    text-align: center;
+    font-family: Audiowide, sans-serif;
+    font-size: 20px;
+    color: white;
+    margin: 10px 0;
+  }
+  canvas {
+    display: block;
+    margin: auto;
+  }
+  p {
+    font-family: sans-serif;
+    color: white;    
+  }
+  .instructions, .story {
+    max-width: 600px;
+    margin: auto;
+  }
+  .instructions {
+    text-align: center;
+    font-weight: bold;
+  }
+  .story, .links{
+    margin-top: 80px;
+    line-height: 1.3;
+  }
+  </style>
 </head>
 <body>
+<h1>Bisbee's Escape</h1>
+<div class="game"></div>
 
+<div class="instructions">
+  <h2>Instructions</h2>
+  <p>Use arrow keys, wasd, hjkl, or numpad to move.</p>
+  <p>Defeat enemies by dropping crates on them.</p>
+  <p>Learn the crates' mysterious effects.</p>
+  <p>Collect all the energy scattered throughout the level</p>
+  <p>OR<p>
+  <p>Collect datachips from trashed enemies to open the gates to next level.</p>
+</div>
+
+<div class="story">
+  <h2>Story</h2>
+  <p>Bisbee worked in the robotonium mines day in and day out. It had a job and did its job well. It was content as a robot could be.</p>
+  <p>Until one day... Suddenly Bisbee had a strange urge to see the surface. There was a whole world out there. What wonders did it hold?</p>
+  <p>Even Bisbee itself didn't know where this spark of curiousity came from. Was it a software bug? A glitch caused by stray neutrinos? But Bisbee knew one thing for sure. There was a collapsed shaft in Zone 7-R that led straight to the surface...</p>
+</div>
+
+<div class="links">
+  <h2>Links</h2>
+  <p><a href="https://github.com/walsh9/7drl2016">Source on GitHub</a></p>
+</div>
 </body>
 </html>

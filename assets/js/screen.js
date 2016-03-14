@@ -105,7 +105,7 @@ Game.Screen.playScreen = {
     Game.stage.addChild(graphics);
 
     if (this.gameEnded) {
-      var levelLabel = new PIXI.Text("STAGE " + this.level, {font:"20px Audiowide", fill:"#888888"});
+      var levelLabel = new PIXI.Text("LEVEL B" + (8 - this.level), {font:"20px Audiowide", fill:"#888888"});
       levelLabel.x = Game.stage.width - 10;
       levelLabel.y = 2;
       levelLabel.anchor.set(1, 0);
@@ -124,7 +124,7 @@ Game.Screen.playScreen = {
       Game.stage.addChild(pressKeyLabel);
 
     } else {
-      var levelLabel = new PIXI.Text("STAGE " + this.level, {font:"20px Audiowide", fill:"white"});
+      var levelLabel = new PIXI.Text("LEVEL B" + (8 - this.level), {font:"20px Audiowide", fill:"white"});
       levelLabel.x = Game.stage.width - 10;
       levelLabel.y = 2;
       levelLabel.anchor.set(1, 0);

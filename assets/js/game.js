@@ -6,10 +6,17 @@ var Game = {
   mapSize: {x: 13, y: 15},
   init: function() {
     this.display = PIXI.autoDetectRenderer(Game.mapSize.x * Game.tileSize.x, (Game.mapSize.y + 2) * Game.tileSize.y);
-    document.body.appendChild(this.display.view);
+    document.querySelector('.game').appendChild(this.display.view);
     this.stage = new PIXI.Container();
     this.switchScreen(Game.Screen.playScreen);
-    window.addEventListener('keydown', function(e) {Game.currentScreen.handleInput('keydown', e);});
+    window.addEventListener('keydown', function(e) {
+      if (e.keyCode === ROT.VK_SPACE ||
+          e.keyCode === ROT.VK_DOWN ||
+          e.keyCode === ROT.VK_UP) {
+        e.preventDefault();
+      }
+      Game.currentScreen.handleInput('keydown', e);
+    });
     return this;
   },
   refresh: function() {
