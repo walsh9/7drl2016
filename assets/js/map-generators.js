@@ -81,13 +81,13 @@ Game.Map.Generators.Basic = {
       map.addEntity(crate);
     }
     for (n = 0; n < hunterCount; n++) {
-      targetCell = map.randomEmpty();
+      targetCell = map.randomEmpty(0, 0, map.grid.width, map.grid.height - 5);
       if (!targetCell) {break;}
       enemy = Object.create(Game.Entity).init(Game.Entity.templates.skullbot, targetCell.x, targetCell.y);
       map.addEntity(enemy);
     }
     for (n = 0; n < stalkerCount; n++) {
-      targetCell = map.randomEmpty();
+      targetCell = map.randomEmpty(0, 0, map.grid.width, map.grid.height - 5);
       if (!targetCell) {break;}
       enemy = Object.create(Game.Entity).init(Game.Entity.templates.spookbot, targetCell.x, targetCell.y);
       map.addEntity(enemy);

@@ -15,13 +15,20 @@ Game.Map = {
     var length = candidates.length;
     return candidates[Math.floor(ROT.RNG.getUniform() * (length))];
   },
-  randomEmpty: function() {
+  randomEmpty: function(x, y, w, h) {
+    x = x || 0;
+    y = y || 0;
+    w = w || this.grid.width;
+    h = h || this.grid.height;
     var map = this;
-    return this.find(function(cell) {
+    var emptyCell = this.find(function(cell) {
       return cell.dug && 
       !cell.impassable &&
+      cell.x >= x && cell.x < x + w &&
+      cell.y >= y && cell.y < y + h &&
       map.unoccupiedAt(cell.x, cell.y);
     });
+    return emptyCell;
   },
   randomDug: function() {
     return this.find(function(cell) {
