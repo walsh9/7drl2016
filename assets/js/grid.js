@@ -55,7 +55,6 @@ Game.Grid = {
         cells.push(cell);
       }
     });
-    console.log(cells);
     return cells;
   }
 };

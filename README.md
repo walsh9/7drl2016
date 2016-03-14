@@ -3,7 +3,7 @@
 ## Todo List
 
 - [x] Lose state  
-- [ ] Win state  
+- [x] Win state  
 - [ ] Title  
 - [x] Multiple levels  
 - [x] Enemies drop key items  

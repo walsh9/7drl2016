@@ -48,7 +48,11 @@ Game.Screen.playScreen = {
   },
   nextLevel: function() {
     this.level += 1;
-    this.newLevel(this.level);
+    if (Game.levels[this.level]) {
+      this.newLevel(this.level);
+    } else {
+      Game.switchScreen(Game.Screen.winScreen);
+    }
   },
   newLevel: function(level) {
     var width = Game.mapSize.x;
@@ -101,6 +105,12 @@ Game.Screen.playScreen = {
     Game.stage.addChild(graphics);
 
     if (this.gameEnded) {
+      var levelLabel = new PIXI.Text("STAGE " + this.level, {font:"20px Audiowide", fill:"#888888"});
+      levelLabel.x = Game.stage.width - 10;
+      levelLabel.y = 2;
+      levelLabel.anchor.set(1, 0);
+      Game.stage.addChild(levelLabel);
+
       var gameOverLabel = new PIXI.Text("GAME OVER", {font:"30px Audiowide", fill:"white"});
       gameOverLabel.x = Game.stage.width / 2;
       gameOverLabel.y = 0;
@@ -230,13 +240,31 @@ Game.Screen.playScreen = {
 
 Game.Screen.winScreen = {
   enter: function() {
-      console.log("Entered win screen."); 
+    console.log("Entered win screen."); 
   },
   exit: function() { 
     console.log("Exited win screen."); 
   },
   render: function(display) {
-      //render win screen
+    Game.display.backgroundColor = 0x01579B;
+    for (var x = 0; x < 13; x++) {
+      Game.Screen.drawTile(Game.stage, 'wall', {x: x, y: 14}, 0xffffff );
+    }
+    Game.Screen.drawTile(Game.stage, 'playerbot', {x: 3, y: 13}, 0xffffff);
+
+    var congrats = new PIXI.Text("CONGRATULATIONS!", {font:"35px Audiowide", fill:"#ffffff"});
+    congrats.x = Game.stage.width / 2;
+    congrats.y = 200;
+    congrats.anchor.set(0.5, 0.5);
+    Game.stage.addChild(congrats);
+
+    var message = new PIXI.Text("YOU MADE IT TO THE SURFACE", {font:"16px Audiowide", fill:"#ffffff"});
+    message.x = Game.stage.width / 2;
+    message.y = 260;
+    message.anchor.set(0.5, 0.5);
+    Game.stage.addChild(message);
+
+    Game.display.render(Game.stage);
   },
   handleInput: function(inputType, inputData) {
 

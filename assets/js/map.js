@@ -128,8 +128,7 @@ Game.Map = {
     }
     var key = entity.x + ',' + entity.y;
     if (this.entities[key]) {
-      console.log(this);
-        throw new Error('Tried to add an entity at an occupied position.');
+      throw new Error('Tried to add an entity at an occupied position.');
     }
     this.entities[key] = entity;
   },
