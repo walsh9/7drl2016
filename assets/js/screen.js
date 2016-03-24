@@ -172,27 +172,26 @@ Game.Screen.playScreen = {
       document.location.reload();
       return;
     }
-    if (inputType === 'keydown') {
+    function valueInArray(value, array) {
+      return array.indexOf(value) >= 0;
+    }
+    var leftKeys  = [ROT.VK_LEFT, ROT.VK_H, ROT.VK_NUMPAD4, ROT.VK_A];
+    var rightKeys = [ROT.VK_RIGHT, ROT.VK_L, ROT.VK_NUMPAD6, ROT.VK_D];
+    var upKeys    = [ROT.VK_UP, ROT.VK_K, ROT.VK_NUMPAD8, ROT.VK_W];
+    var downKeys  = [ROT.VK_DOWN, ROT.VK_J, ROT.VK_NUMPAD2, ROT.VK_S];
+    if (inputType === 'keydown' || inputType === 'swipe') {
       // Movement
-      if (inputData.keyCode === ROT.VK_LEFT || 
-        inputData.keyCode === ROT.VK_H ||
-        inputData.keyCode === ROT.VK_NUMPAD4 ||
-        inputData.keyCode === ROT.VK_A) {
+      if ((inputType === 'keydown' && valueInArray(inputData.keyCode, leftKeys)) || 
+          (inputType === 'swipe' && inputData.direction === Hammer.DIRECTION_LEFT)) {
         this.move(-1, 0);
-      } else if (inputData.keyCode === ROT.VK_RIGHT || 
-                 inputData.keyCode === ROT.VK_L ||
-                 inputData.keyCode === ROT.VK_NUMPAD6 ||
-                 inputData.keyCode === ROT.VK_D) {
+      } else if ((inputType === 'keydown' && valueInArray(inputData.keyCode, rightKeys)) || 
+          (inputType === 'swipe' && inputData.direction === Hammer.DIRECTION_RIGHT)) {
         this.move(1, 0);
-      } else if (inputData.keyCode === ROT.VK_UP || 
-                 inputData.keyCode === ROT.VK_K ||
-                 inputData.keyCode === ROT.VK_NUMPAD8 ||
-                 inputData.keyCode === ROT.VK_W) {
+      } else if ((inputType === 'keydown' && valueInArray(inputData.keyCode, upKeys)) || 
+          (inputType === 'swipe' && inputData.direction === Hammer.DIRECTION_UP)) {
         this.move(0, -1);
-      } else if (inputData.keyCode === ROT.VK_DOWN || 
-                 inputData.keyCode === ROT.VK_J ||
-                 inputData.keyCode === ROT.VK_NUMPAD2 ||
-                 inputData.keyCode === ROT.VK_S) {
+      } else if ((inputType === 'keydown' && valueInArray(inputData.keyCode, downKeys)) || 
+          (inputType === 'swipe' && inputData.direction === Hammer.DIRECTION_DOWN)) {
         this.move(0, 1);
       // } else if (inputData.keyCode === ROT.VK_SPACE || 
       //            inputData.keyCode === ROT.VK_PERIOD) {

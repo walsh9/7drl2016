@@ -5,8 +5,9 @@ var Game = {
   tileSize: {x: 34, y: 34},
   mapSize: {x: 13, y: 15},
   init: function() {
+    var gameElement = document.querySelector('.game');
     this.display = PIXI.autoDetectRenderer(Game.mapSize.x * Game.tileSize.x, (Game.mapSize.y + 2) * Game.tileSize.y);
-    document.querySelector('.game').appendChild(this.display.view);
+    gameElement.appendChild(this.display.view);
     this.stage = new PIXI.Container();
     this.switchScreen(Game.Screen.playScreen);
     window.addEventListener('keydown', function(e) {
@@ -17,6 +18,13 @@ var Game = {
       }
       Game.currentScreen.handleInput('keydown', e);
     });
+    var hammerOptions = {domEvents: true, preventDefault: true};
+    var mc = new Hammer.Manager(gameElement, hammerOptions);
+    mc.add( new Hammer.Swipe( {event: 'swipe', direction: Hammer.DIRECTION_ALL, velocity: 0.05}) );
+    mc.on('swipe', function handleSwipe(e) {
+      Game.currentScreen.handleInput('swipe', e);
+    });
+
     return this;
   },
   refresh: function() {
@@ -62,7 +70,6 @@ if (window.WebFont) {
 
 
 window.addEventListener('load', function() {
-
   (function setup() {
     console.log('waiting');
     if (Game.loaded.tiles && Game.loaded.fonts) {
