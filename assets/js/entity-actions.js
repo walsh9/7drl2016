@@ -1,6 +1,10 @@
 Game.Entity.actions = {};
 
 Game.Entity.actions.playerAction = function () {
+  if (this.isCheckmatedPlayer()) {
+    this.dies();
+    return;
+  }
   this.acting = true;
   Game.refresh();
   this.map.engine.lock();
