@@ -89,7 +89,8 @@ Game.Map = {
         current = frontier.shift();
         current.neighbors().some( function(neighbor) {
           if (neighbor.searched === undefined && 
-              !item.map.grid.getCell(neighbor.x, neighbor.y).impassable) {
+              !item.map.grid.getCell(neighbor.x, neighbor.y).impassable &&
+              !item.map.entityAt(neighbor.x, neighbor.y)) {
             key = neighbor.x + ',' + neighbor.y;
             if (!item.map.items[key]) {
               item.x = neighbor.x;
