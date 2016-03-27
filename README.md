@@ -1,6 +1,6 @@
 #Bisbee's Escape
 
-![Screenshot](docs/screenshot.png)
+<img src="docs/screenshot.png" width=480>
 
 A 7-day roguelike about digging tunnels and dropping crates.  
 
