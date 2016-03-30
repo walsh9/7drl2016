@@ -12,8 +12,7 @@ Made for the 2106 7-day Roguelike Challenge.
 
 #Description
 
-Control Bisbee with arrow keys, wasd, hjkl, number pad, or by swiping.
-
+Control Bisbee with arrow keys, wasd, hjkl, or number pad.
 You can clear levels in two different ways:  
 
 - Collect all the yellow energy units and open the yellow gate.
