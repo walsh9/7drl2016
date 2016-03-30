@@ -82,36 +82,6 @@ Game.Entity = {
     }
     return false;
   },
-  canMove: function(x, y, map) {
-    var oldX = this.x;
-    var oldY = this.y;
-    var thisCell = this.cellHere();
-    var targetCell = this.map.grid.getCell(x, y);
-    if (targetCell && !targetCell.impassable) {
-      var target = this.map.entityAt(x, y);
-      if (target) { // Bump logic
-        if (this.canPush && target.isPushable && target.y == oldY) {
-          var pushX = x + (x - oldX);
-          var pushY = y + (y - oldY);
-          return target.canMove(pushX, pushY, map);
-        } else if (this.canKill || this.canCrush && target.y == oldY + 1) {
-          return true;
-        }
-      }
-      if (this.map.unoccupiedAt(x, y)) {
-        if (thisCell.linked(targetCell)) {
-          return true;
-        } else if (targetCell.dug && this.canTunnel) {
-          return true;
-        } else if (!targetCell.dug && this.canDig) {
-          return true;
-        } else if (this.canPhase) {
-          return true;
-        }
-      }
-    }
-    return false;
-  },
   getSpeed: function() {
     return this.speed;
   },
@@ -161,14 +131,5 @@ Game.Entity = {
   },
   kill: function(killer) {
     this.dies.call(this, killer);
-  },
-  isCheckmatedPlayer: function() {
-    var player = this;
-    var here = this.map.grid.getCell(this.x, this.y);
-    var neighbors = here.neighbors();
-    var passableNeigbors = neighbors.filter(function(neighbor) {
-      return (player.canMove(neighbor.x, neighbor.y, player.map));
-    });
-    return passableNeigbors.length === 0;
   }
 };
