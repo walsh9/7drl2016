@@ -35,40 +35,13 @@ var Game = {
   }
 };
 
-Game.loaded = {};
-Game.loaded.tiles = false;
-Game.loaded.fonts = false;
-
-// Load Tiles
-PIXI.loader
-.add(["assets/i/tileset.json"])
-.load(function() {Game.loaded.tiles = true;});
-//Load Fonts
-if (window.WebFont) {
-  WebFont.load({
-    google: {
-      families: ['Audiowide']
-    },
-    active: function() {Game.loaded.fonts = true;},
-    // Let game start after font loading timeout. we tried.
-    inactive: function() {Game.loaded.fonts = true;}
-  });
-} else {
-  //Probably not online. Let the game start.
-  Game.loaded.fonts = true;
-}
-
-
-
-
 window.addEventListener('load', function() {
+  var tileAtlas = ["assets/i/tileset.json"];
+  PIXI.loader.add(tileAtlas)
+  .load(setup);
 
-  (function setup() {
-    console.log('waiting');
-    if (Game.loaded.tiles && Game.loaded.fonts) {
-      Game.init().refresh();
-    } else {
-      window.setTimeout(setup, 100);
-    }
-  })();
+  function setup() {
+    Game.init().refresh();
+  }
+
 }, false);

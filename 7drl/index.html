@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title></title>
-  <script src="//ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
   <script src="lib/js/pixi.min.js"></script>
   <script src="lib/js/rot.min.js"></script>
   <script src="assets/js/game.js"></script>
@@ -49,26 +49,23 @@
     font-family: sans-serif;
     color: white;    
   }
-  .instructions, .story, .links, .message{
+  .instructions, .story, .links{
     max-width: 600px;
     margin: auto;
   }
-  .instructions, .links, .message {
+  .instructions, .links {
     text-align: center;
     font-weight: bold;
   }
-  .message {
-    font-style: italic;
-  }
-  .story, .links, .instructions {
-    margin-top: 60px;
+  .story, .links{
+    margin-top: 80px;
     line-height: 1.3;
   }
-  a {
-    color: #00ffff;
+  .links a {
+    color: #ffffff;
     text-decoration: none;
   }
-  a:hover {
+  .links a:hover {
     text-decoration: underline;
   }
   </style>
@@ -76,11 +73,6 @@
 <body>
 <h1>Bisbee's Escape</h1>
 <div class="game"></div>
-
-<div class="message">
-  <p>This is version 1.1, with bugfixes and <a href="https://github.com/walsh9/7drl2016#11">other changes</a>.</p>
-  <p>For the original 7DRL release, <a href="/7drl/">click here</a>.</p>
-</div>
 
 <div class="instructions">
   <h2>Instructions</h2>
