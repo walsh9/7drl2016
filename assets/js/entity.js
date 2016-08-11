@@ -92,32 +92,37 @@ Game.Entity = {
     }
     return Promise.resolve(false);
   },
-  canMove: function(x, y, map) {
-    var oldX = this.x;
-    var oldY = this.y;
-    var thisCell = this.cellHere();
+  canEnterCell: function(x, y) {
+    var targetCell = this.map.grid.getCell(x, y);
+    if (this.map.unoccupiedAt(x, y)) {
+      if (this.cellHere().linked(targetCell)) {
+        return true;
+      } else if (targetCell.dug && this.canTunnel) {
+        return true;
+      } else if (!targetCell.dug && this.canDig) {
+        return true;
+      } else if (this.canPhase) {
+        return true;
+      }
+    }
+  },
+  canPushTarget: function(target) {
+    if (this.canPush && target.isPushable && target.y === this.y) {
+      var pushX = target.x + (target.x - this.x);
+      var pushY = target.y + (target.y - this.y);
+      return target.canMove(pushX, pushY);
+    }
+    return false;
+  },
+  canMove: function(x, y) {
     var targetCell = this.map.grid.getCell(x, y);
     if (targetCell && !targetCell.impassable) {
       var target = this.map.entityAt(x, y);
-      if (target) { // Bump logic
-        if (this.canPush && target.isPushable && target.y == oldY) {
-          var pushX = x + (x - oldX);
-          var pushY = y + (y - oldY);
-          return target.canMove(pushX, pushY, map);
-        } else if (this.canKill || this.canCrush && target.y == oldY + 1) {
-          return true;
-        }
+      if (target && this.canPushTarget(target)) {
+        return true;
       }
-      if (this.map.unoccupiedAt(x, y)) {
-        if (thisCell.linked(targetCell)) {
-          return true;
-        } else if (targetCell.dug && this.canTunnel) {
-          return true;
-        } else if (!targetCell.dug && this.canDig) {
-          return true;
-        } else if (this.canPhase) {
-          return true;
-        }
+      if (this.canEnterCell(x, y)) {
+        return true;
       }
     }
     return false;
@@ -189,14 +194,10 @@ Game.Entity = {
     return new Promise(function(resolve) {
       var target = thisEntity.map.entityAt(x, y);
       if (target) { // Bump logic
-        if (thisEntity.canPush && target.isPushable && target.y == oldY) {
-          var pushX = x + (x - oldX);
-          var pushY = y + (y - oldY);
-          if (target.canMove(pushX, pushY, thisEntity.map)) {
-            resolve(target.tryMove(pushX, pushY));
-          } else {
-            resolve(false);
-          }
+        if (thisEntity.canPushTarget(target)) {
+          var pushX = target.x + (target.x - thisEntity.x);
+          var pushY = target.y + (target.y - thisEntity.y);
+          resolve(target.tryMove(pushX, pushY));
         } else if (thisEntity.canKill || thisEntity.canCrush && target.y == oldY + 1) {
           target.kill(thisEntity);
           resolve(true);
@@ -209,19 +210,14 @@ Game.Entity = {
     var x = targetCell.x;
     var y = targetCell.y;
     var thisCell = this.cellHere();
-    if (this.map.unoccupiedAt(x, y)) {
-      if (thisCell.linked(targetCell)) {
-        return this.movePosition(x, y);
-      } else if (targetCell.dug && this.canTunnel) {
+    if (this.canEnterCell(x, y)) {
+      if (targetCell.dug && this.canTunnel) {
         thisCell.link(targetCell);
-        return this.movePosition(x, y);  
       } else if (!targetCell.dug && this.canDig) {
         targetCell.dug = true;
         thisCell.link(targetCell);
-        return this.movePosition(x, y);  
-      } else if (this.canPhase) {
-        return this.movePosition(x, y);
       }
+      return this.movePosition(x, y);      
     }
     return false;
   }
