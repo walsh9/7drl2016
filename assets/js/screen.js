@@ -12,12 +12,12 @@ Game.Screen.addEffect = function(tile, pos, color, time) {
 };
 
 Game.Screen.drawTile = function(container, tileIndex, pos, color) {
-      var textures = PIXI.loader.resources["assets/i/tileset.json"].textures;
-      var tile = new PIXI.Sprite(textures[tileIndex]);
-      tile.tint = color || 0xFFFFFF;
-      tile.position.x = pos.x * Game.tileSize.x;
-      tile.position.y = (pos.y + 2) * Game.tileSize.y;
-      container.addChild(tile);
+  var textures = PIXI.loader.resources["assets/i/tileset.json"].textures;
+  var tile = new PIXI.Sprite(textures[tileIndex]);
+  tile.tint = color || 0xFFFFFF;
+  tile.position.x = Math.floor(pos.x * Game.tileSize.x);
+  tile.position.y = Math.floor((pos.y + 2) * Game.tileSize.y);
+  container.addChild(tile);
 };
 
 Game.Screen.titleScreen = {
@@ -35,6 +35,8 @@ Game.Screen.playScreen = {
   player: null,
   level: 1,
   gameEnded: false,
+  inputLocked: false,
+  inputBuffer: [],
   enter: function() {
     this.player = Object.create(Game.Entity).init(Game.Entity.templates.player);
     Game.Crates.init();
@@ -50,6 +52,7 @@ Game.Screen.playScreen = {
     this.level += 1;
     if (Game.levels[this.level]) {
       this.newLevel(this.level);
+      console.log('level ' + this.level)
     } else {
       Game.switchScreen(Game.Screen.winScreen);
     }
@@ -60,6 +63,7 @@ Game.Screen.playScreen = {
     this.levelOptions = Game.levels[level - 1];
     var generator = Game.Map.Generators.Basic;
     this.map = generator.create(width, height, this.levelOptions);
+    this.map.screen = this;
     this.player.items.energy = 0;
     this.player.items.datachip = 0;
     generator.placeWalls(this.map);
@@ -150,7 +154,7 @@ Game.Screen.playScreen = {
   renderEntities: function(display) {
     for (var key in this.map.entities) {
       var entity = this.map.entities[key];
-      Game.Screen.drawTile(Game.stage, entity.getTile(), {x: entity.x, y: entity.y}, entity.getColor() );
+      Game.Screen.drawTile(Game.stage, entity.getTile(), {x: entity.slidingX || entity.x, y: entity.slidingY || entity.y}, entity.getColor() );
     }
   },
   renderItems: function(display) {
@@ -165,7 +169,22 @@ Game.Screen.playScreen = {
       Game.Screen.drawTile(Game.stage, effect.tile, {x: effect.x, y: effect.y}, effect.color );
     }
   },
-
+  lockInput:  function() {
+    this.inputLocked = true;
+  },
+  unlockInput:  function() {
+    this.inputLocked = false;
+    this.nextInput();
+  },
+  nextInput: function() {
+    if (this.inputBuffer.length > 0) {
+      var input = this.inputBuffer.pop();
+      this.handleInput(input.type, input.data);
+    };
+  },
+  bufferInput: function(inputType, inputData) {
+    this.inputBuffer.push({type: inputType, data: inputData})
+  },
   handleInput: function(inputType, inputData) {
     // If the game is over, enter will bring the user to the losing screen.
     if (this.gameEnded) {
@@ -173,26 +192,31 @@ Game.Screen.playScreen = {
       return;
     }
     if (inputType === 'keydown') {
-      // Movement
-      if (inputData.keyCode === ROT.VK_LEFT || 
+      if (this.inputLocked) {
+        this.bufferInput(inputType, inputData);
+      } else if (inputData.keyCode === ROT.VK_LEFT || 
         inputData.keyCode === ROT.VK_H ||
         inputData.keyCode === ROT.VK_NUMPAD4 ||
         inputData.keyCode === ROT.VK_A) {
+        this.lockInput();
         this.move(-1, 0);
       } else if (inputData.keyCode === ROT.VK_RIGHT || 
                  inputData.keyCode === ROT.VK_L ||
                  inputData.keyCode === ROT.VK_NUMPAD6 ||
                  inputData.keyCode === ROT.VK_D) {
+        this.lockInput();
         this.move(1, 0);
       } else if (inputData.keyCode === ROT.VK_UP || 
                  inputData.keyCode === ROT.VK_K ||
                  inputData.keyCode === ROT.VK_NUMPAD8 ||
                  inputData.keyCode === ROT.VK_W) {
+        this.lockInput();
         this.move(0, -1);
       } else if (inputData.keyCode === ROT.VK_DOWN || 
                  inputData.keyCode === ROT.VK_J ||
                  inputData.keyCode === ROT.VK_NUMPAD2 ||
                  inputData.keyCode === ROT.VK_S) {
+        this.lockInput();
         this.move(0, 1);
       // } else if (inputData.keyCode === ROT.VK_SPACE || 
       //            inputData.keyCode === ROT.VK_PERIOD) {
@@ -204,37 +228,43 @@ Game.Screen.playScreen = {
     } 
   },
   move: function(dX, dY) {
-      var newX = this.player.x + dX;
-      var newY = this.player.y + dY;
-      // Try to move to the new cell
-      if (this.player.tryMove(newX, newY, this.player.map)) {
+    var newX = this.player.x + dX;
+    var newY = this.player.y + dY;
+    // Try to move to the new cell
+    var self = this;
+    this.player.tryMove(newX, newY, this.player.map)
+    .then(function(didMove) {
+      if (didMove) {
         //collect items
-        var item = this.player.map.itemAt(newX, newY);
+        var item = self.player.map.itemAt(newX, newY);
         if (item) {
           var itemname = item.collect();
-          if (this.player.items[itemname]) {
-            this.player.items[itemname] += 1;
+          if (self.player.items[itemname]) {
+            self.player.items[itemname] += 1;
           } else {
-            this.player.items[itemname] = 1;
+            self.player.items[itemname] = 1;
           }
           var doorPos;
-          if (this.map.energyDoor && this.player.items.energy >= this.levelOptions.energyNeeded) {
-            doorPos = {x: this.map.energyDoor.x, y: this.map.energyDoor.y};
-            this.map.removeEntity(this.map.energyDoor);
-            this.map.energyDoor = undefined;
+          if (self.map.energyDoor && self.player.items.energy >= self.levelOptions.energyNeeded) {
+            doorPos = {x: self.map.energyDoor.x, y: self.map.energyDoor.y};
+            self.map.removeEntity(self.map.energyDoor);
+            self.map.energyDoor = undefined;
             var openEnergyDoor = Object.create(Game.Entity).init(Game.Entity.templates.openEnergyDoor, doorPos.x, doorPos.y);
-            this.map.addEntity(openEnergyDoor);
+            self.map.addEntity(openEnergyDoor);
           }
-          if (this.map.datachipDoor && this.player.items.datachip >= this.levelOptions.datachipsNeeded) {
-            doorPos = {x: this.map.datachipDoor.x, y: this.map.datachipDoor.y};
-            this.map.removeEntity(this.map.datachipDoor);
-            this.map.datachipDoor = undefined;
+          if (self.map.datachipDoor && self.player.items.datachip >= self.levelOptions.datachipsNeeded) {
+            doorPos = {x: self.map.datachipDoor.x, y: self.map.datachipDoor.y};
+            self.map.removeEntity(self.map.datachipDoor);
+            self.map.datachipDoor = undefined;
             var openDatachipDoor = Object.create(Game.Entity).init(Game.Entity.templates.openDatachipDoor, doorPos.x, doorPos.y);
-            this.map.addEntity(openDatachipDoor);
+            self.map.addEntity(openDatachipDoor);
           }
         }
-        this.player.map.engine.unlock();
+        self.player.map.engine.unlock();
+      } else {
+        self.unlockInput();
       }
+    }); 
   },
 };
 

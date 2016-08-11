@@ -35,16 +35,45 @@ Game.Entity = {
     this.x = x;
     this.y = y;
     if (map) {
-        map.updateEntityPosition(this, oldX, oldY);
+      map.updateEntityPosition(this, oldX, oldY);
     }
     return this;
+  },
+  movePosition: function (x, y) {
+    let thisEntity = this;
+    var oldX = this.x;
+    var oldY = this.y;
+    return new Promise(function(resolve) {
+      thisEntity.slidingX = oldX;
+      thisEntity.slidingY = oldY;
+      function slide(entity, x, y) {
+        let threshold = 0.01;
+        if ((entity.slidingX < x + threshold && entity.slidingX > x - threshold) && 
+            (entity.slidingY < y + threshold && entity.slidingY > y - threshold)) {    
+          entity.slidingX = entity.x = x;
+          entity.slidingY = entity.y = y;
+          thisEntity.map.updateEntityPosition(thisEntity, oldX, oldY);
+          resolve(thisEntity);
+        } else {
+          var speed = 0.25;
+          var interval = 1/60 * 1000;
+          if      (entity.slidingX > x) {entity.slidingX = entity.slidingX - speed}
+          else if (entity.slidingX < x) {entity.slidingX = entity.slidingX + speed} 
+          if      (entity.slidingY > y) {entity.slidingY = entity.slidingY - speed}
+          else if (entity.slidingY < y) {entity.slidingY = entity.slidingY + speed}
+          Game.refresh();
+          setTimeout(function() { slide(entity, x, y); }, interval);
+        }
+      }
+      slide(thisEntity, x, y);
+    });
   },
   cellHere: function() {
     return this.map.grid.getCell(this.x, this.y);
   },
   tryMove: function(x, y, map) {
     if (this.x === x && this.y === y) {
-      return false;
+      return Promise.resolve(false);
     }
     if (this.isPlayer && this.map.entityAt(x, y)) {
       this.map.entityAt(x, y).activate.call(null, this);
@@ -54,33 +83,14 @@ Game.Entity = {
     var oldY = this.y;
     var thisCell = this.cellHere();
     var targetCell = this.map.grid.getCell(x, y);
+    var thisEntity = this;
     if (targetCell && !targetCell.impassable) {
-      var target = this.map.entityAt(x, y);
-      if (target) { // Bump logic
-        if (this.canPush && target.isPushable && target.y == oldY) {
-          var pushX = x + (x - oldX);
-          var pushY = y + (y - oldY);
-          target.tryMove(pushX, pushY, map);
-        } else if (this.canKill || this.canCrush && target.y == oldY + 1) {
-          target.kill(this);
-        }
-      }
-      if (this.map.unoccupiedAt(x, y)) { // Moving into unoccupied cell
-        if (thisCell.linked(targetCell)) {
-          return this.setPosition(x, y, map);
-        } else if (targetCell.dug && this.canTunnel) {
-          thisCell.link(targetCell);
-          return this.setPosition(x, y, map);  
-        } else if (!targetCell.dug && this.canDig) {
-          targetCell.dug = true;
-          thisCell.link(targetCell);
-          return this.setPosition(x, y, map);  
-        } else if (this.canPhase) {
-          return this.setPosition(x, y, map);
-        }
-      }
+      return thisEntity.tryClearEntityAt(targetCell)
+      .then(function(x) {
+        return thisEntity.tryEnter(targetCell);
+      });
     }
-    return false;
+    return Promise.resolve(false);
   },
   canMove: function(x, y, map) {
     var oldX = this.x;
@@ -152,15 +162,14 @@ Game.Entity = {
   },
   act: function() {
     var entity = this;
-    this.action.call(this);
-    this.map.engine.lock();
-    setTimeout(function() {
-      entity.map.engine.unlock();
-      Game.refresh();
-    }, 0);
+    return new Promise(function(resolve) {
+      Promise.resolve(entity.action.call(entity))
+      .then(Game.refresh)
+      .then(resolve);
+    });
   },
   kill: function(killer) {
-    this.dies.call(this, killer);
+    return this.dies.call(this, killer);
   },
   isCheckmatedPlayer: function() {
     var player = this;
@@ -170,5 +179,50 @@ Game.Entity = {
       return (player.canMove(neighbor.x, neighbor.y, player.map));
     });
     return passableNeigbors.length === 0;
+  },
+  tryClearEntityAt(targetCell) {
+    var thisEntity = this;
+    var oldX = this.x;
+    var oldY = this.y;
+    var x = targetCell.x;
+    var y = targetCell.y;
+    return new Promise(function(resolve) {
+      var target = thisEntity.map.entityAt(x, y);
+      if (target) { // Bump logic
+        if (thisEntity.canPush && target.isPushable && target.y == oldY) {
+          var pushX = x + (x - oldX);
+          var pushY = y + (y - oldY);
+          if (target.canMove(pushX, pushY, thisEntity.map)) {
+            resolve(target.tryMove(pushX, pushY));
+          } else {
+            resolve(false);
+          }
+        } else if (thisEntity.canKill || thisEntity.canCrush && target.y == oldY + 1) {
+          target.kill(thisEntity);
+          resolve(true);
+        }
+      }
+      resolve(false);
+    });
+  },
+  tryEnter(targetCell) {
+    var x = targetCell.x;
+    var y = targetCell.y;
+    var thisCell = this.cellHere();
+    if (this.map.unoccupiedAt(x, y)) {
+      if (thisCell.linked(targetCell)) {
+        return this.movePosition(x, y);
+      } else if (targetCell.dug && this.canTunnel) {
+        thisCell.link(targetCell);
+        return this.movePosition(x, y);  
+      } else if (!targetCell.dug && this.canDig) {
+        targetCell.dug = true;
+        thisCell.link(targetCell);
+        return this.movePosition(x, y);  
+      } else if (this.canPhase) {
+        return this.movePosition(x, y);
+      }
+    }
+    return false;
   }
 };

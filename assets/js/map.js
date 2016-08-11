@@ -61,14 +61,14 @@ Game.Map = {
     entity.map = this;
     this.updateEntityPosition(entity);
     if (entity.isPlayer) {
-        this.player = entity;
+      this.player = entity;
     }
     this.scheduler.add(entity, true);
   },
   removeEntity: function(entity) {
     var key = entity.x + ',' + entity.y;
     if (this.entities[key] == entity) {
-        delete this.entities[key];
+      delete this.entities[key];
     }
     this.scheduler.remove(entity);
   },
@@ -131,6 +131,8 @@ Game.Map = {
     if (this.entities[key]) {
       throw new Error('Tried to add an entity at an occupied position.');
     }
+    entity.slidingX = entity.x;
+    entity.slidingY = entity.y;
     this.entities[key] = entity;
   },
   itemAt: function(x, y){
