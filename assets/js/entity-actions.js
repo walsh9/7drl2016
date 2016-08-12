@@ -99,15 +99,19 @@ Game.Entity.actions.botMove = function () {
 
 Game.Entity.actions.fall = function () {
   var thisEntity = this;
-  var targetCell = this.cellHere().south;
-  var passableTargetCell = targetCell && !targetCell.impassable;
-  var canKeepFalling = passableTargetCell && (targetCell.dug || this.canDig);
-  var canStartFalling = passableTargetCell && targetCell.dug && this.map.unoccupiedAt(targetCell.x, targetCell.y);
+  var cellBelow = this.cellHere().south;
+  var passableCellBelow = cellBelow && !cellBelow.impassable;
+  var entityBelowMe = this.map.entityAt(cellBelow.x, cellBelow.y);
+  var entitySupportingMe =  entityBelowMe && (entityBelowMe.isPlayer || entityBelowMe.crateType !== undefined);
+
+  var canKeepFalling = passableCellBelow && (cellBelow.dug || this.canDig);
+  var canStartFalling = passableCellBelow && cellBelow.dug && !entitySupportingMe;
+
   var isFalling = this.falling > 0;
   var isFallingHard = this.falling > 1;
 
   if ((isFalling && canKeepFalling) || (!isFalling && canStartFalling)) {
-    return thisEntity.tryMove(targetCell.x, targetCell.y, thisEntity.map).then(function(fell) {
+    return thisEntity.tryMove(cellBelow.x, cellBelow.y, thisEntity.map).then(function(fell) {
       if (fell) {
         thisEntity.falling += 1;
       }
