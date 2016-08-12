@@ -92,6 +92,7 @@ Game.Map.Generators.Basic = {
       enemy = Object.create(Game.Entity).init(Game.Entity.templates.spookbot, targetCell.x, targetCell.y);
       map.addEntity(enemy);
     }
+    map.scheduler.add(map.crates, true);
     return map;
   },
   addPlayer: function(map, player) {
