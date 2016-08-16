@@ -50,7 +50,7 @@ Game.Screen.playScreen = {
   },
   nextLevel: function() {
     this.level += 1;
-    if (Game.levels[this.level]) {
+    if (Game.levels[this.level - 1]) {
       this.newLevel(this.level);
       console.log('level ' + this.level)
     } else {
