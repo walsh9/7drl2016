@@ -23,6 +23,8 @@ Game.Entity = {
     this.isPushable = options.isPushable || false;
     this.isPlayer   = options.isPlayer   || false;
     this.angryForm  = options.angryForm  || {};
+    this.angrySound = options.angrySound || '';
+    this.calmSound  = options.calmSound  || '';
     this.action    = options.action     || Game.Entity.actions.nullAction;
     this.dies      = options.dies       || Game.Entity.actions.nullAction;
     this.activate  = options.activate   || Game.Entity.actions.nullAction;
@@ -131,6 +133,7 @@ Game.Entity = {
     return this.speed;
   },
   getAngry: function() {
+    Game.Sound.play(this.angrySound);
     this.isAngry = true;
     Object.assign(this, this.angryForm);
   },
@@ -143,6 +146,7 @@ Game.Entity = {
   relax: function(n) {
     this.frustration -= n;
     if (this.frustration < 0) {
+      Game.Sound.play(this.calmSound);
       this.calmDown();
     }
   },
@@ -214,6 +218,7 @@ Game.Entity = {
       if (targetCell.dug && this.canTunnel) {
         thisCell.link(targetCell);
       } else if (!targetCell.dug && this.canDig) {
+        Game.Sound.play('dig');
         targetCell.dug = true;
         thisCell.link(targetCell);
       }

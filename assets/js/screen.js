@@ -34,6 +34,7 @@ Game.Screen.titleScreen = {
 Game.Screen.playScreen = {
   player: null,
   level: 1,
+  thisLevel: 1,
   gameEnded: false,
   inputLocked: false,
   inputBuffer: [],
@@ -52,6 +53,7 @@ Game.Screen.playScreen = {
     this.level += 1;
     if (Game.levels[this.level]) {
       this.newLevel(this.level);
+      Game.Sound.play('new_level');
       console.log('level ' + this.level)
     } else {
       Game.switchScreen(Game.Screen.winScreen);
@@ -238,6 +240,7 @@ Game.Screen.playScreen = {
         //collect items
         var item = self.player.map.itemAt(newX, newY);
         if (item) {
+          Game.Sound.play(item.pickupSound);
           var itemname = item.collect();
           if (self.player.items[itemname]) {
             self.player.items[itemname] += 1;
@@ -250,18 +253,25 @@ Game.Screen.playScreen = {
             self.map.removeEntity(self.map.energyDoor);
             self.map.energyDoor = undefined;
             var openEnergyDoor = Object.create(Game.Entity).init(Game.Entity.templates.openEnergyDoor, doorPos.x, doorPos.y);
+            Game.Sound.play('door_open');
             self.map.addEntity(openEnergyDoor);
           }
           if (self.map.datachipDoor && self.player.items.datachip >= self.levelOptions.datachipsNeeded) {
             doorPos = {x: self.map.datachipDoor.x, y: self.map.datachipDoor.y};
             self.map.removeEntity(self.map.datachipDoor);
             self.map.datachipDoor = undefined;
+            Game.Sound.play('door_open');
             var openDatachipDoor = Object.create(Game.Entity).init(Game.Entity.templates.openDatachipDoor, doorPos.x, doorPos.y);
             self.map.addEntity(openDatachipDoor);
           }
         }
+        self.thisLevel = self.level;
         self.player.map.engine.unlock();
       } else {
+        if (self.level === self.thisLevel) {
+          self.thisLevel = self.level;
+          Game.Sound.play('cant_move');
+        }
         self.unlockInput();
       }
     }); 

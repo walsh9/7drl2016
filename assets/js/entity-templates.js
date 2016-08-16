@@ -51,6 +51,8 @@ Game.Entity.templates.skullbot = {
   canTunnel: false,
   canKill: true,
   niceToBots: true,
+  angrySound: 'skull_anger',
+  calmSound: 'skull_calm',
   action: Game.Entity.actions.botMove,
   dies: Game.Entity.actions.botDie,
   angryForm: Game.Entity.templates.angrySkullBot
@@ -70,6 +72,8 @@ Game.Entity.templates.spookbot = {
   canPhase: false,
   canKill: true,
   niceToBots: true,
+  angrySound: 'spook_anger',
+  calmSound: 'spook_calm',
   action: Game.Entity.actions.botMove,
   dies: Game.Entity.actions.botDie,
   angryForm: Game.Entity.templates.angrySpookBot
