@@ -28,6 +28,12 @@ Guide Bisbee safely through 7 levels to reach the surface.
 
 #Changelog
 
+## v1.2.0
+- Animated motion between tiles
+- Sound effects! Toggle with 'S'.
+- Crate turn order changed. Crates always go after enemies take their turns.
+- Bug fixes
+
 ## v1.1
 - Bug fixes
 
