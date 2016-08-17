@@ -5,34 +5,51 @@ Game.Entity.actions.playerAction = function () {
     this.dies();
     return;
   }
-  this.acting = true;
-  Game.refresh();
+  Game.currentScreen.unlockInput();
   this.map.engine.lock();
-  this.acting = false;
+  Game.refresh();
 };
 
 Game.Entity.actions.playerDie = function (killer) {
-  Game.currentScreen.gameEnded = true;
-  this.map.targets.shift();
-  this.map.removeEntity(this);
-  console.log('GAME OVER');
+  var thisPlayer = this;
+  return new Promise(function(resolve) {
+    Game.currentScreen.gameEnded = true;
+    thisPlayer.map.targets.shift();
+    thisPlayer.map.removeEntity(thisPlayer);
+    console.log('GAME OVER');
+    resolve(true);
+  });
 };
 
 Game.Entity.actions.die = function (killer) {
-  this.map.removeEntity(this);
+  var thisEntity = this;
+  return new Promise(function(resolve) {
+    thisEntity.map.removeEntity(thisEntity);
+    resolve(true);
+  });
 };
 
 Game.Entity.actions.decoyDie = function (killer) {
-  this.map.targets.pop();
-  this.map.removeEntity(this);
+  var thisDecoy = this;
+  return new Promise(function(resolve) {
+    thisDecoy.map.targets.pop();
+    thisDecoy.map.removeEntity(thisDecoy);
+    resolve(true);
+  });
 };
 
 Game.Entity.actions.botDie = function (killer) {
   if (killer.niceToBots === false) {
-    var loot = Object.create(Game.Item).init(Game.Item.templates.datachip);
-    this.map.addItem(this.x, this.y, loot);
-    this.map.removeEntity(this);
-    console.log(killer.tile, 'killed', this.tile);
+    var thisBot = this;
+    return new Promise(function(resolve) {
+      var loot = Object.create(Game.Item).init(Game.Item.templates.datachip);
+      thisBot.map.addItem(thisBot.x, thisBot.y, loot);
+      thisBot.map.removeEntity(thisBot);
+      console.log(killer.tile, 'killed', thisBot.tile);
+      resolve(true);
+    });
+  } else {
+    return Promise.resolve(false);
   }
 };
 
@@ -50,7 +67,7 @@ Game.Entity.actions.seekPlayer = function () {
   var entity = this;
   var target = entity.map.targets.slice(-1)[0];
   if (!target) {
-    return false;
+    return Promise.resolve(false);
   }
   var pathfinder = Object.create(Game.Pathfinder).init(entity.map.grid, target,
   function passable(here, there) {
@@ -66,38 +83,50 @@ Game.Entity.actions.seekPlayer = function () {
 
 Game.Entity.actions.botMove = function () {
   if (this.isAngry) {
-   this.relax(5);
+    this.relax(5);
   } else {
     this.frustrate(1);
   }
-  if (!Game.Entity.actions.seekPlayer.call(this)) {
-    Game.Entity.actions.randomWalk.call(this);
-    this.frustrate(2);
-  }
+  var bot = this;
+  return Game.Entity.actions.seekPlayer.call(this)
+  .then(function(didSeek) { 
+    if (!didSeek) {
+      bot.frustrate(2);
+      return Game.Entity.actions.randomWalk.call(bot);
+    }
+  });
 };
 
 Game.Entity.actions.fall = function () {
-  var targetCell = this.cellHere().south;
-  if (this.falling > 0) {  // falling
-    if (targetCell && !targetCell.impassable && (targetCell.dug || this.canDig)) { // falling further
-      var fell = this.tryMove(targetCell.x, targetCell.y, this.map);
+  var thisEntity = this;
+  var cellBelow = this.cellHere().south;
+  var passableCellBelow = cellBelow && !cellBelow.impassable;
+  var entityBelowMe = this.map.entityAt(cellBelow.x, cellBelow.y);
+  var entitySupportingMe =  entityBelowMe && (entityBelowMe.isPlayer || entityBelowMe.crateType !== undefined);
+
+  var canKeepFalling = passableCellBelow && (cellBelow.dug || this.canDig);
+  var canStartFalling = passableCellBelow && cellBelow.dug && !entitySupportingMe;
+
+  var isFalling = this.falling > 0;
+  var isFallingHard = this.falling > 1;
+
+  if ((isFalling && canKeepFalling) || (!isFalling && canStartFalling)) {
+    return thisEntity.tryMove(cellBelow.x, cellBelow.y, thisEntity.map).then(function(fell) {
       if (fell) {
-        this.falling += 1;
+        thisEntity.falling += 1;
       }
-    } else { // if only fell one tile, don't break;
-      if (this.falling > 1) {
-        this.kill(this);
-      } else {
-        this.falling = 0;
-      }
+      return true;
+    });
+  } else if (isFalling && !canKeepFalling) {
+    if (isFallingHard) {
+      thisEntity.kill(thisEntity); // crash!
+    } else { // else, gentle fall. stop falling and don't break;
+      thisEntity.falling = 0;
     }
+    return Promise.resolve(true);
   } else {
-    if (targetCell && !targetCell.impassable && targetCell.dug && this.map.unoccupiedAt(targetCell.x, targetCell.y) &&
-       (this.tryMove(targetCell.x, targetCell.y, this.map))) {
-        this.falling = 1;
-    } else {
-      this.falling = 0;
-    }
+    thisEntity.falling = 0;
+    return Promise.resolve(false);
   }
 };
 
@@ -113,18 +142,18 @@ Game.Entity.actions.crateBreak = function (killer) {
       Game.Crates.identify(crateType);
     }
   }
-};
-
+}
 
 Game.Entity.actions.randomWalk = function () {
   var targetCell = this.cellHere().randomLink();
   if (targetCell) {
-    this.tryMove(targetCell.x, targetCell.y, this.map);
+    return this.tryMove(targetCell.x, targetCell.y, this.map);
   }
+  return false;
 };
 
 Game.Entity.actions.gotoNextLevel = function () {
   Game.currentScreen.nextLevel();
 };
 
-Game.Entity.actions.nullAction = function() {};
+Game.Entity.actions.nullAction = function() {return Promise.resolve();};

@@ -6,6 +6,7 @@ Game.Map = {
     this.entities = {};
     this.items = {};
     this.targets = [];
+    this.crates = Object.create(Game.Crates.Group).init();
     this.scheduler = new ROT.Scheduler.Simple();
     this.engine = new ROT.Engine(this.scheduler);
     return this;
@@ -61,16 +62,24 @@ Game.Map = {
     entity.map = this;
     this.updateEntityPosition(entity);
     if (entity.isPlayer) {
-        this.player = entity;
+      this.player = entity;
     }
-    this.scheduler.add(entity, true);
+    if (entity.crateType !== undefined) {
+      this.crates.add(entity);
+    } else {
+      this.scheduler.add(entity, true);
+    }
   },
   removeEntity: function(entity) {
     var key = entity.x + ',' + entity.y;
     if (this.entities[key] == entity) {
-        delete this.entities[key];
+      delete this.entities[key];
     }
-    this.scheduler.remove(entity);
+    if (entity.crateType !== undefined) {
+      this.crates.remove(entity);
+    } else {
+      this.scheduler.remove(entity);
+    }
   },
   addItem: function(x, y, item) {
     item.map = this;
@@ -131,6 +140,8 @@ Game.Map = {
     if (this.entities[key]) {
       throw new Error('Tried to add an entity at an occupied position.');
     }
+    entity.slidingX = entity.x;
+    entity.slidingY = entity.y;
     this.entities[key] = entity;
   },
   itemAt: function(x, y){

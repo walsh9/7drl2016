@@ -27,6 +27,34 @@ Game.Crates = {
   }
 };
 
+Game.Crates.Group = {
+  init: function() {
+    this.crateList = [];
+    return this;
+  },
+  add: function(crate) {
+    this.crateList.push(crate)
+  },
+  remove: function(crateToRemove) {
+    this.crateList = this.crateList.filter(function(crate) {
+      return crate !== crateToRemove
+    });
+  },
+  act: function() {
+    this._sortCrates();
+    return this.crateList.reduce(function(prevPromise, crate) {
+      return prevPromise.then(function() {
+        return crate.act();
+      });
+    }, Promise.resolve());
+  },
+  _sortCrates() {
+    this.crateList = this.crateList.sort(function(crateA, crateB) {
+      return (crateB.y * 100 + crateB.x) - (crateA.y * 100 + crateA.x);
+    });
+  }
+}
+
 Game.Crates.colors = [
 0xC2C3C7,
 0xFFA300,
@@ -87,8 +115,6 @@ Game.Crates.actions.explode = function(x, y, map, crateId) {
   Game.display.render(Game.stage);
   blastZone.forEach(cleanUp);
 };
-
-
 
 Game.Crates.actions.laserBlast = function(x, y, map, crateId) {
   var blastZone = [                   {x: x, y: y - 2},

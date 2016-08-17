@@ -20,8 +20,10 @@ var Game = {
     return this;
   },
   refresh: function() {
-    while (this.stage.children[0]) { this.stage.removeChild(this.stage.children[0]); }
-    this.currentScreen.render(this.display);
+    if (this.currentScreen) {
+      while (this.stage.children[0]) { this.stage.removeChild(this.stage.children[0]); }
+      this.currentScreen.render(this.display);
+    }
   },
   switchScreen: function(screen) {
     if (this.currentScreen !== null) {
