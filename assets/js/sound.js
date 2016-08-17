@@ -5,16 +5,22 @@ Game.Sound = {
       src: ['assets/sound/sounds.ogg', 'assets/sound/sounds.mp3'],
       sprite: soundJSON.data.sprite
     });
+    this.muted = false;
     return this;
   },
   play(audio) {
-    if (typeof audio === 'string' || audio instanceof String) {
-      this._playOneSound(audio);
-    } else if (Array.isArray(audio)) {
-      this._playSounds(audio);
-    } else {
-      throw new Error('Can only play a string or array of strings');
-    };
+    if (!this.muted) {
+      if (typeof audio === 'string' || audio instanceof String) {
+        this._playOneSound(audio);
+      } else if (Array.isArray(audio)) {
+        this._playSounds(audio);
+      } else {
+        throw new Error('Can only play a string or array of strings');
+      };
+    }
+  },
+  toggleMute() {
+    this.muted = !this.muted;
   },
   _playOneSound(name) {
     var soundId = this.sound.play(name);
