@@ -66,6 +66,7 @@ Game.Crates.colors = [
 Game.Crates.actions = {};
 
 Game.Crates.actions.createDecoy = function(x, y, map, crateId) {
+  Game.Sound.play('decoy_hello');
   var decoy = Object.create(Game.Entity).init(Game.Entity.templates.decoy, x, y);
   map.addEntity(decoy);
   map.targets.push(decoy);
@@ -80,6 +81,7 @@ Game.Crates.actions.createDigCrate = function(x, y, map, crateId) {
 };
 
 Game.Crates.actions.createEnemy = function(x, y, map, crateId) {
+  Game.Sound.play('skull_hello');
   var enemy = Object.create(Game.Entity).init(Game.Entity.templates.skullbot, x, y);
   map.addEntity(enemy);
 };
@@ -88,7 +90,6 @@ Game.Crates.actions.explode = function(x, y, map, crateId) {
   var blastZone = [{x: x - 1, y: y - 1}, {x: x, y: y - 1}, {x: x + 1, y: y - 1},
                    {x: x - 1, y: y},     {x: x, y: y},     {x: x + 1, y: y},
                    {x: x - 1, y: y + 1}, {x: x, y: y + 1}, {x: x + 1, y: y + 1}];
-  console.log('BOOM');
   function blastCell(pos) {
     Game.Screen.addEffect("boom", pos, 0xffffff, 300);
     var cell = map.grid.getCell(pos.x, pos.y);
@@ -111,6 +112,8 @@ Game.Crates.actions.explode = function(x, y, map, crateId) {
       cell.blasted = undefined;
     }
   }
+
+  Game.Sound.play('explode_1');
   blastZone.forEach(blastCell);
   Game.display.render(Game.stage);
   blastZone.forEach(cleanUp);
@@ -154,6 +157,8 @@ Game.Crates.actions.laserBlast = function(x, y, map, crateId) {
       cell.blasted = undefined;
     }
   }
+
+  Game.Sound.play('explode_2');
   blastZone.forEach(blastCell);
   Game.display.render(Game.stage);
   blastZone.forEach(cleanUp);
