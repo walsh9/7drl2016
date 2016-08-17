@@ -5,7 +5,7 @@ Game.Sound = {
       src: ['assets/sound/sounds.ogg', 'assets/sound/sounds.mp3'],
       sprite: soundJSON.data.sprite
     });
-    this.muted = false;
+    this.muted = (location.hash === "#silent");
     return this;
   },
   play(audio) {
@@ -19,8 +19,20 @@ Game.Sound = {
       };
     }
   },
+  mute() {
+    this.muted = true;
+    location.hash = "#silent";
+  },
+  unmute() {
+    this.muted = false;
+    location.hash = "";
+  },
   toggleMute() {
-    this.muted = !this.muted;
+    if (this.muted) {
+      this.unmute();
+    } else {
+      this.mute();
+    }
   },
   _playOneSound(name) {
     var soundId = this.sound.play(name);
