@@ -1,4 +1,4 @@
-#Bisbee's Escape
+#Bisby's Escape
 
 <img src="docs/screenshot.png" width=480>
 
@@ -12,13 +12,13 @@ Made for the 2106 7-day Roguelike Challenge.
 
 #Description
 
-Control Bisbee with arrow keys, wasd, hjkl, or number pad.
+Control Bisby with arrow keys, hjkl, or number pad.
 You can clear levels in two different ways:  
 
 - Collect all the yellow energy units and open the yellow gate.
 - Crush enemies with crates, collect their blue datachips, and open the blue gate.
 
-Guide Bisbee safely through 7 levels to reach the surface.
+Guide Bisby safely through 7 levels to reach the surface.
 
 #Tips
 

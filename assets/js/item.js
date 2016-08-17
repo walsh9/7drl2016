@@ -6,6 +6,7 @@ Game.Item = {
     this.name    = options.name    || "";
     this.tile    = options.tile    || "error";
     this.color   = options.color   || "#ffffff";
+    this.pickupSound = options.pickupSound || '';
     this.map = null;
     return this;
   },

@@ -13,6 +13,7 @@ Game.Entity.actions.playerAction = function () {
 Game.Entity.actions.playerDie = function (killer) {
   var thisPlayer = this;
   return new Promise(function(resolve) {
+    Game.Sound.play('player_die');
     Game.currentScreen.gameEnded = true;
     thisPlayer.map.targets.shift();
     thisPlayer.map.removeEntity(thisPlayer);
@@ -32,6 +33,7 @@ Game.Entity.actions.die = function (killer) {
 Game.Entity.actions.decoyDie = function (killer) {
   var thisDecoy = this;
   return new Promise(function(resolve) {
+    Game.Sound.play('decoy_die');
     thisDecoy.map.targets.pop();
     thisDecoy.map.removeEntity(thisDecoy);
     resolve(true);
@@ -43,6 +45,7 @@ Game.Entity.actions.botDie = function (killer) {
     var thisBot = this;
     return new Promise(function(resolve) {
       var loot = Object.create(Game.Item).init(Game.Item.templates.datachip);
+      Game.Sound.play('bot_crush');
       thisBot.map.addItem(thisBot.x, thisBot.y, loot);
       thisBot.map.removeEntity(thisBot);
       console.log(killer.tile, 'killed', thisBot.tile);
@@ -113,6 +116,7 @@ Game.Entity.actions.fall = function () {
   if ((isFalling && canKeepFalling) || (!isFalling && canStartFalling)) {
     return thisEntity.tryMove(cellBelow.x, cellBelow.y, thisEntity.map).then(function(fell) {
       if (fell) {
+        Game.Sound.play('crate_fall');
         thisEntity.falling += 1;
       }
       return true;
@@ -121,6 +125,7 @@ Game.Entity.actions.fall = function () {
     if (isFallingHard) {
       thisEntity.kill(thisEntity); // crash!
     } else { // else, gentle fall. stop falling and don't break;
+      Game.Sound.play('crate_soft_landing');
       thisEntity.falling = 0;
     }
     return Promise.resolve(true);
@@ -138,6 +143,7 @@ Game.Entity.actions.crateBreak = function (killer) {
     var crateType = this.crateType;
     this.map.removeEntity(this);
     if (crateType !== undefined) {
+      Game.Sound.play('crate_crash');
       Game.Crates.doAction(crateType, x, y, map);
       Game.Crates.identify(crateType);
     }

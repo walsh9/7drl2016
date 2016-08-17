@@ -17,6 +17,7 @@ var Game = {
       }
       Game.currentScreen.handleInput('keydown', e);
     });
+    Game.Sound.init().play('bootup');
     return this;
   },
   refresh: function() {
@@ -43,7 +44,7 @@ Game.loaded.fonts = false;
 
 // Load Tiles
 PIXI.loader
-.add(["assets/i/tileset.json"])
+.add(["assets/i/tileset.json","assets/sound/sounds.json"])
 .load(function() {Game.loaded.tiles = true;});
 //Load Fonts
 if (window.WebFont) {

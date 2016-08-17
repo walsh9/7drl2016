@@ -34,6 +34,7 @@ Game.Screen.titleScreen = {
 Game.Screen.playScreen = {
   player: null,
   level: 1,
+  thisLevel: 1,
   gameEnded: false,
   inputLocked: false,
   inputBuffer: [],
@@ -50,8 +51,9 @@ Game.Screen.playScreen = {
   },
   nextLevel: function() {
     this.level += 1;
-    if (Game.levels[this.level]) {
+    if (Game.levels[this.level - 1]) {
       this.newLevel(this.level);
+      Game.Sound.play('new_level');
       console.log('level ' + this.level)
     } else {
       Game.switchScreen(Game.Screen.winScreen);
@@ -128,11 +130,27 @@ Game.Screen.playScreen = {
       Game.stage.addChild(pressKeyLabel);
 
     } else {
+      var line1y = 2;
+      var line2y = Game.tileSize.y + 2;
+
       var levelLabel = new PIXI.Text("LEVEL B" + (8 - this.level), {font:"20px Audiowide", fill:"white"});
       levelLabel.x = Game.stage.width - 10;
-      levelLabel.y = 2;
+      levelLabel.y = line1y;
       levelLabel.anchor.set(1, 0);
       Game.stage.addChild(levelLabel);
+
+      var soundStatus = Game.Sound.muted ? "OFF" : "ON";
+      var soundLabel = new PIXI.Text("OUND " + soundStatus, {font:"20px Audiowide", fill:"white"});
+      soundLabel.x = Game.stage.width - 10;
+      soundLabel.y = line2y;
+      soundLabel.anchor.set(1, 0);
+      Game.stage.addChild(soundLabel);
+
+      var soundLabelPrefix = new PIXI.Text("S", {font:"20px Audiowide", fill:"#ffff00"})
+      soundLabelPrefix.x = Game.stage.width - 10 - soundLabel.width;
+      soundLabelPrefix.y = line2y;
+      soundLabelPrefix.anchor.set(1, 0);
+      Game.stage.addChild(soundLabelPrefix);
 
       Game.Screen.drawTile(Game.stage, Game.Item.templates.energy.tile, {x: 0, y: -2}, Game.Item.templates.energy.color );
       Game.Screen.drawTile(Game.stage, Game.Item.templates.datachip.tile, {x: 0, y: -1}, Game.Item.templates.datachip.color );
@@ -140,13 +158,13 @@ Game.Screen.playScreen = {
       var energyCounter = new PIXI.Text("x " + this.player.items.energy + " / " + this.levelOptions.energyNeeded, 
         {font:"20px Audiowide", fill:"white"});
       energyCounter.x = Game.tileSize.x;
-      energyCounter.y = 2;
+      energyCounter.y = line1y;
       Game.stage.addChild(energyCounter);
 
       var datachipCounter = new PIXI.Text("x " + this.player.items.datachip + " / " + this.levelOptions.datachipsNeeded, 
         {font:"20px Audiowide", fill:"white"});
       datachipCounter.x = Game.tileSize.x;
-      datachipCounter.y = Game.tileSize.y + 2;
+      datachipCounter.y = line2y;
       Game.stage.addChild(datachipCounter);
     }
 
@@ -192,35 +210,32 @@ Game.Screen.playScreen = {
       return;
     }
     if (inputType === 'keydown') {
-      if (this.inputLocked) {
+      if (inputData.keyCode === ROT.VK_S) {
+        Game.Sound.toggleMute();
+        Game.refresh();
+      } else if (this.inputLocked) {
         this.bufferInput(inputType, inputData);
       } else if (inputData.keyCode === ROT.VK_LEFT || 
         inputData.keyCode === ROT.VK_H ||
-        inputData.keyCode === ROT.VK_NUMPAD4 ||
-        inputData.keyCode === ROT.VK_A) {
+        inputData.keyCode === ROT.VK_NUMPAD4) {
         this.lockInput();
         this.move(-1, 0);
       } else if (inputData.keyCode === ROT.VK_RIGHT || 
                  inputData.keyCode === ROT.VK_L ||
-                 inputData.keyCode === ROT.VK_NUMPAD6 ||
-                 inputData.keyCode === ROT.VK_D) {
+                 inputData.keyCode === ROT.VK_NUMPAD6) {
         this.lockInput();
         this.move(1, 0);
       } else if (inputData.keyCode === ROT.VK_UP || 
                  inputData.keyCode === ROT.VK_K ||
-                 inputData.keyCode === ROT.VK_NUMPAD8 ||
-                 inputData.keyCode === ROT.VK_W) {
+                 inputData.keyCode === ROT.VK_NUMPAD8) {
         this.lockInput();
         this.move(0, -1);
       } else if (inputData.keyCode === ROT.VK_DOWN || 
                  inputData.keyCode === ROT.VK_J ||
-                 inputData.keyCode === ROT.VK_NUMPAD2 ||
-                 inputData.keyCode === ROT.VK_S) {
+                 inputData.keyCode === ROT.VK_NUMPAD2) {
         this.lockInput();
         this.move(0, 1);
-      // } else if (inputData.keyCode === ROT.VK_SPACE || 
-      //            inputData.keyCode === ROT.VK_PERIOD) {
-      //   this.move(0, 0);
+        // No wait button is intentional to create zugzwang
       } else {
         // Not a valid key
         return;
@@ -238,6 +253,7 @@ Game.Screen.playScreen = {
         //collect items
         var item = self.player.map.itemAt(newX, newY);
         if (item) {
+          Game.Sound.play(item.pickupSound);
           var itemname = item.collect();
           if (self.player.items[itemname]) {
             self.player.items[itemname] += 1;
@@ -250,18 +266,25 @@ Game.Screen.playScreen = {
             self.map.removeEntity(self.map.energyDoor);
             self.map.energyDoor = undefined;
             var openEnergyDoor = Object.create(Game.Entity).init(Game.Entity.templates.openEnergyDoor, doorPos.x, doorPos.y);
+            Game.Sound.play('door_open');
             self.map.addEntity(openEnergyDoor);
           }
           if (self.map.datachipDoor && self.player.items.datachip >= self.levelOptions.datachipsNeeded) {
             doorPos = {x: self.map.datachipDoor.x, y: self.map.datachipDoor.y};
             self.map.removeEntity(self.map.datachipDoor);
             self.map.datachipDoor = undefined;
+            Game.Sound.play('door_open');
             var openDatachipDoor = Object.create(Game.Entity).init(Game.Entity.templates.openDatachipDoor, doorPos.x, doorPos.y);
             self.map.addEntity(openDatachipDoor);
           }
         }
+        self.thisLevel = self.level;
         self.player.map.engine.unlock();
       } else {
+        if (self.level === self.thisLevel) {
+          self.thisLevel = self.level;
+          Game.Sound.play('cant_move');
+        }
         self.unlockInput();
       }
     }); 
