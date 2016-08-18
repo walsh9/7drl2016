@@ -205,7 +205,7 @@ Game.Screen.playScreen = {
   },
   bufferInput: function(inputType, inputData) {
     if (this.inputBuffer.length < 3) {
-      this.inputBuffer.push({type: inputType, data: inputData});
+      this.inputBuffer.unshift({type: inputType, data: inputData});
     }
   },
   handleInput: function(inputType, inputData) {
