@@ -98,6 +98,7 @@ Game.Map.Generators.Basic = {
   addPlayer: function(map, player) {
     player.x = Math.floor(map.grid.width / 2);
     player.y = map.grid.height - 2;
+    map.grid.getCell(player.x, player.y).dug = true;
     map.addEntity(player);
     map.targets = [player];
   }
