@@ -60,6 +60,7 @@ Game.Screen.playScreen = {
     }
   },
   newLevel: function(level) {
+    this.lockInput();
     var width = Game.mapSize.x;
     var height = Game.mapSize.y;
     this.levelOptions = Game.levels[level - 1];
@@ -74,6 +75,8 @@ Game.Screen.playScreen = {
     generator.digPaths(this.map);
     generator.populate(this.map);
     this.grid = this.map.grid;
+    this.inputBuffer = [];
+    this.unlockInput();
     this.map.engine.start();
   },
   render: function(display) {
@@ -192,7 +195,6 @@ Game.Screen.playScreen = {
   },
   unlockInput:  function() {
     this.inputLocked = false;
-    this.nextInput();
   },
   nextInput: function() {
     if (this.inputBuffer.length > 0) {
