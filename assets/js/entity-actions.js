@@ -5,8 +5,8 @@ Game.Entity.actions.playerAction = function () {
     this.dies();
     return;
   }
-  Game.currentScreen.unlockInput();
   this.map.engine.lock();
+  Game.currentScreen.unlockInput();
   Game.refresh();
 };
 
