@@ -138,7 +138,7 @@ Game.Map = {
     }
     var key = entity.x + ',' + entity.y;
     if (this.entities[key]) {
-      var errorMessage = 'Tried to add ' + entity.tile + ' at ' + key + ', but ' + this.entities[key] + ' was already there.';
+      var errorMessage = 'Tried to add ' + entity.tile + ' at ' + key + ', but ' + this.entities[key].tile + ' was already there.';
       throw new Error(errorMessage);
     }
     entity.slidingX = entity.x;
