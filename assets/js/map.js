@@ -138,7 +138,8 @@ Game.Map = {
     }
     var key = entity.x + ',' + entity.y;
     if (this.entities[key]) {
-      throw new Error('Tried to add an entity at an occupied position.');
+      var errorMessage = 'Tried to add ' + entity.tile + ' at ' + key + ', but ' + this.entities[key].tile + ' was already there.';
+      throw new Error(errorMessage);
     }
     entity.slidingX = entity.x;
     entity.slidingY = entity.y;

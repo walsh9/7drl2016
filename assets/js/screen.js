@@ -60,6 +60,7 @@ Game.Screen.playScreen = {
     }
   },
   newLevel: function(level) {
+    this.lockInput();
     var width = Game.mapSize.x;
     var height = Game.mapSize.y;
     this.levelOptions = Game.levels[level - 1];
@@ -74,6 +75,8 @@ Game.Screen.playScreen = {
     generator.digPaths(this.map);
     generator.populate(this.map);
     this.grid = this.map.grid;
+    this.inputBuffer = [];
+    this.unlockInput();
     this.map.engine.start();
   },
   render: function(display) {
@@ -123,7 +126,7 @@ Game.Screen.playScreen = {
       gameOverLabel.anchor.set(0.5, 0);
       Game.stage.addChild(gameOverLabel);
 
-      var pressKeyLabel = new PIXI.Text("Press any key to restart.", {font:"20px Audiowide", fill:"white"});
+      var pressKeyLabel = new PIXI.Text("Press [space] to try again.", {font:"20px Audiowide", fill:"white"});
       pressKeyLabel.x = Game.stage.width / 2;
       pressKeyLabel.y = Game.tileSize.y;
       pressKeyLabel.anchor.set(0.5, 0);
@@ -192,7 +195,6 @@ Game.Screen.playScreen = {
   },
   unlockInput:  function() {
     this.inputLocked = false;
-    this.nextInput();
   },
   nextInput: function() {
     if (this.inputBuffer.length > 0) {
@@ -205,7 +207,7 @@ Game.Screen.playScreen = {
   },
   handleInput: function(inputType, inputData) {
     // If the game is over, enter will bring the user to the losing screen.
-    if (this.gameEnded) {
+    if (this.gameEnded && inputType === 'keydown' && inputData.keyCode === ROT.VK_SPACE) {
       document.location.reload();
       return;
     }

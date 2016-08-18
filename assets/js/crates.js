@@ -41,6 +41,7 @@ Game.Crates.Group = {
     });
   },
   act: function() {
+    this.sanityCheck();
     this._sortCrates();
     return this.crateList.reduce(function(prevPromise, crate) {
       return prevPromise.then(function() {
@@ -48,10 +49,25 @@ Game.Crates.Group = {
       });
     }, Promise.resolve());
   },
-  _sortCrates() {
+  _sortCrates: function() {
     this.crateList = this.crateList.sort(function(crateA, crateB) {
       return (crateB.y * 100 + crateB.x) - (crateA.y * 100 + crateA.x);
     });
+  },
+  sanityCheck: function() {
+    var entitiesInMotion = Object.keys(Game.currentScreen.map.entities)
+      .map(function(key) {
+        return Game.currentScreen.map.entities[key]
+      })
+      .filter(function(entity) {
+        return ((entity.crateType !== undefined && entity.falling > 0) || 
+          entity.isPlayer || 
+          entity.canKill
+        );
+      });
+    if (entitiesInMotion.length === 0) {
+      Game.currentScreen.map.engine.lock();
+    }
   }
 }
 

@@ -28,6 +28,10 @@ Guide Bisby safely through 7 levels to reach the surface.
 
 #Changelog
 
+## v1.2.1
+- Press space to restart instead of any key
+- Bug fixes
+
 ## v1.2.0
 - Animated motion between tiles
 - Sound effects! Toggle with 'S'.
