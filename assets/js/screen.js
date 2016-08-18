@@ -195,6 +195,7 @@ Game.Screen.playScreen = {
   },
   unlockInput:  function() {
     this.inputLocked = false;
+    this.nextInput();
   },
   nextInput: function() {
     if (this.inputBuffer.length > 0) {
@@ -203,7 +204,9 @@ Game.Screen.playScreen = {
     };
   },
   bufferInput: function(inputType, inputData) {
-    this.inputBuffer.push({type: inputType, data: inputData})
+    if (this.inputBuffer.length < 3) {
+      this.inputBuffer.push({type: inputType, data: inputData});
+    }
   },
   handleInput: function(inputType, inputData) {
     // If the game is over, enter will bring the user to the losing screen.

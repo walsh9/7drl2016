@@ -28,6 +28,9 @@ Guide Bisby safely through 7 levels to reach the surface.
 
 #Changelog
 
+## v1.2.2
+- Bug fixes
+
 ## v1.2.1
 - Press space to restart instead of any key
 - Bug fixes
