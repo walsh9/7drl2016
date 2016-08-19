@@ -42,14 +42,14 @@ Game.Entity = {
     return this;
   },
   movePosition: function (x, y) {
-    let thisEntity = this;
+    var thisEntity = this;
     var oldX = this.x;
     var oldY = this.y;
     return new Promise(function(resolve) {
       thisEntity.slidingX = oldX;
       thisEntity.slidingY = oldY;
       function slide(entity, x, y) {
-        let threshold = 0.01;
+        var threshold = 0.01;
         if ((entity.slidingX < x + threshold && entity.slidingX > x - threshold) && 
             (entity.slidingY < y + threshold && entity.slidingY > y - threshold)) {    
           entity.slidingX = entity.x = x;
