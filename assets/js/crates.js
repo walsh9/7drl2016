@@ -33,11 +33,11 @@ Game.Crates.Group = {
     return this;
   },
   add: function(crate) {
-    this.crateList.push(crate)
+    this.crateList.push(crate);
   },
   remove: function(crateToRemove) {
     this.crateList = this.crateList.filter(function(crate) {
-      return crate !== crateToRemove
+      return crate !== crateToRemove;
     });
   },
   act: function() {
@@ -57,7 +57,7 @@ Game.Crates.Group = {
   sanityCheck: function() {
     var entitiesInMotion = Object.keys(Game.currentScreen.map.entities)
       .map(function(key) {
-        return Game.currentScreen.map.entities[key]
+        return Game.currentScreen.map.entities[key];
       })
       .filter(function(entity) {
         return ((entity.crateType !== undefined && entity.falling > 0) || 
@@ -69,7 +69,7 @@ Game.Crates.Group = {
       Game.currentScreen.map.engine.lock();
     }
   }
-}
+};
 
 Game.Crates.colors = [
 0xC2C3C7,

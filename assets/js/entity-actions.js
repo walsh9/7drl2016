@@ -148,7 +148,7 @@ Game.Entity.actions.crateBreak = function (killer) {
       Game.Crates.identify(crateType);
     }
   }
-}
+};
 
 Game.Entity.actions.randomWalk = function () {
   var targetCell = this.cellHere().randomLink();

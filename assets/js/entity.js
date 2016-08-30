@@ -59,10 +59,10 @@ Game.Entity = {
         } else {
           var speed = 0.25;
           var interval = 1/60 * 1000;
-          if      (entity.slidingX > x) {entity.slidingX = entity.slidingX - speed}
-          else if (entity.slidingX < x) {entity.slidingX = entity.slidingX + speed} 
-          if      (entity.slidingY > y) {entity.slidingY = entity.slidingY - speed}
-          else if (entity.slidingY < y) {entity.slidingY = entity.slidingY + speed}
+          if      (entity.slidingX > x) {entity.slidingX = entity.slidingX - speed;}
+          else if (entity.slidingX < x) {entity.slidingX = entity.slidingX + speed;}
+          if      (entity.slidingY > y) {entity.slidingY = entity.slidingY - speed;}
+          else if (entity.slidingY < y) {entity.slidingY = entity.slidingY + speed;}
           Game.refresh();
           setTimeout(function() { slide(entity, x, y); }, interval);
         }
@@ -193,7 +193,7 @@ Game.Entity = {
 
     return passableNeigbors.length === 0 && !openDoorIsAbovePlayer;
   },
-  tryClearEntityAt(targetCell) {
+  tryClearEntityAt: function(targetCell) {
     var thisEntity = this;
     var oldX = this.x;
     var oldY = this.y;
@@ -214,7 +214,7 @@ Game.Entity = {
       resolve(false);
     });
   },
-  tryEnter(targetCell) {
+  tryEnter: function(targetCell) {
     var x = targetCell.x;
     var y = targetCell.y;
     var thisCell = this.cellHere();

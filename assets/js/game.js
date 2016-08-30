@@ -30,6 +30,7 @@ var Game = {
     if (this.currentScreen !== null) {
         this.currentScreen.exit();
     }
+
     this.currentScreen = screen;
     if (!this.currentScreen !== null) {
       this.currentScreen.enter();
