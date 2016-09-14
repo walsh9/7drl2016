@@ -70,6 +70,7 @@ Game.Screen.playScreen = {
     this.player.items.energy = 0;
     this.player.items.datachip = 0;
     generator.placeWalls(this.map);
+    generator.placeObstacles(this.map);
     generator.addPlayer(this.map, this.player);
     generator.placeItems(this.map);
     generator.digPaths(this.map);

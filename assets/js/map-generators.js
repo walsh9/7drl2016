@@ -25,6 +25,34 @@ Game.Map.Generators.Basic = {
     map.datachipDoor = datachipDoor;
     return map;
   },
+  placeObstacles: function(map) {
+    var numRects = map.numObstacles || ROT.RNG.getUniformInt(0, 10);
+    var randomObstacle = function(map) {
+      var rect = {
+        width: ROT.RNG.getUniformInt(1,3),
+        height: ROT.RNG.getUniformInt(1,3)
+      };
+      rect.x = ROT.RNG.getUniformInt(2, map.grid.width - 2 - rect.width);
+      rect.y = ROT.RNG.getUniformInt(2, map.grid.width - 4 - rect.height);
+      return rect;
+    };
+    for (var i = 0; i < numRects; i++) {
+      var obstacle = randomObstacle(map);
+      for(var x = obstacle.x; x < obstacle.x + obstacle.width; x++) {
+        for(var y = obstacle.y; y < obstacle.y + obstacle.height; y++) {
+          map.grid.getCell(x, y).impassable = true;
+        }
+      }
+      for(var borderX = obstacle.x - 1; borderX < obstacle.x + obstacle.width + 1; borderX++) {
+        map.grid.getCell(borderX, obstacle.y - 1).impassable = false;
+        map.grid.getCell(borderX, obstacle.y + obstacle.height).impassable = false;
+      }
+      for(var borderY = obstacle.y - 1; borderY < obstacle.y + obstacle.height + 1; borderY++) {
+        map.grid.getCell(obstacle.x - 1, borderY).impassable = false;
+        map.grid.getCell(obstacle.x + obstacle.width, borderY).impassable = false;
+      }
+    }
+  },
   placeItems: function(map) {
     var energyCount = this.options.energy;
     var energySpread = this.options.energySpread;
