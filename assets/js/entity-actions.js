@@ -174,7 +174,7 @@ Game.Entity.actions.spreadFlames = function () {
 };
 
 Game.Entity.actions.burnTile = function (killer) {
-  if (killer.tile === 'fire') {
+  if (killer.tile === 'fire' || killer.crateType !== undefined) {
     this.cellHere().burnt = true;
     this.map.removeEntity(this);
     return Promise.resolve(true);
