@@ -150,6 +150,39 @@ Game.Entity.actions.crateBreak = function (killer) {
   }
 };
 
+Game.Entity.actions.spreadFlames = function () {
+  var map = this.map;
+  var thisEntity = this;
+  var thisCell = this.cellHere();
+  thisCell.neighbors().forEach(function(neighbor) {
+    if (thisCell.linked(neighbor) && !neighbor.burnt) {
+      var x = neighbor.x;
+      var y = neighbor.y;
+      var targetEntity = map.entityAt(x, y);
+      if (targetEntity) {
+        targetEntity.kill(thisEntity);
+      }
+      if (!map.entityAt(x, y)) {
+        var fire = Object.create(Game.Entity).init(Game.Entity.templates.fire, x, y);
+        map.addEntity(fire);
+      }
+    }
+    //if cell not already burnt, kill things and create more fire
+  });
+  this.kill(this);
+  return Promise.resolve(true);
+};
+
+Game.Entity.actions.burnTile = function (killer) {
+  if (killer.tile === 'fire') {
+    this.cellHere().burnt = true;
+    this.map.removeEntity(this);
+    return Promise.resolve(true);
+  } else {
+    return Promise.resolve(false);
+  }
+};
+
 Game.Entity.actions.randomWalk = function () {
   var targetCell = this.cellHere().randomLink();
   if (targetCell) {

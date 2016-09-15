@@ -105,6 +105,9 @@ Game.Screen.playScreen = {
         if (cell.west  && cell.west.dug && cell.linked(cell.west))  { Game.Screen.drawTile(container, "dugwest", pos); }
         if (cell.north && cell.north.dug && cell.linked(cell.north)) { Game.Screen.drawTile(container, "dugnorth", pos); }
         if (cell.south && cell.south.dug && cell.linked(cell.south)) { Game.Screen.drawTile(container, "dugsouth", pos); }
+        if (cell.burnt) {
+          Game.Screen.drawTile(container, "debris", pos, 0x333333);
+        }
       }
     }
   },

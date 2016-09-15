@@ -88,18 +88,16 @@ Game.Crates.actions.createDecoy = function(x, y, map, crateId) {
   map.targets.push(decoy);
 };
 
-Game.Crates.actions.createDigCrate = function(x, y, map, crateId) {
-  var digCrate = Object.create(Game.Entity).init(Game.Entity.templates.digCrate, x, y);
-  digCrate.color = Game.Crates.getColor(crateId);
-  map.addEntity(digCrate);
-  digCrate.falling = 2;
-  digCrate.act();
-};
-
 Game.Crates.actions.createEnemy = function(x, y, map, crateId) {
   Game.Sound.play('skull_hello');
   var enemy = Object.create(Game.Entity).init(Game.Entity.templates.skullbot, x, y);
   map.addEntity(enemy);
+};
+
+Game.Crates.actions.createFire = function(x, y, map, crateId) {
+  //Game.Sound.play('fire');
+  var fire = Object.create(Game.Entity).init(Game.Entity.templates.fire, x, y);
+  map.addEntity(fire);
 };
 
 Game.Crates.actions.explode = function(x, y, map, crateId) {
@@ -202,9 +200,9 @@ Game.Crates.types = [
     tile: "crate_cross",
     action: Game.Crates.actions.laserBlast
   },{
-    name: "dig",
+    name: "fire",
     known: false,
-    tile: "crate_fall",
-    action: Game.Crates.actions.createDigCrate  
+    tile: "crate_fire",
+    action: Game.Crates.actions.createFire  
   }
 ];
