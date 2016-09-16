@@ -18,6 +18,7 @@ Game.Entity.actions.playerDie = function (killer) {
     thisPlayer.map.targets.shift();
     thisPlayer.map.removeEntity(thisPlayer);
     console.log('GAME OVER');
+    Game.refresh();
     resolve(true);
   });
 };
@@ -169,12 +170,16 @@ Game.Entity.actions.spreadFlames = function () {
     }
     //if cell not already burnt, kill things and create more fire
   });
-  this.kill(this);
-  return Promise.resolve(true);
+  return new Promise(function(resolve) {setTimeout(function() {  
+    thisEntity.kill(thisEntity).then(function(){    
+      Game.refresh();
+      resolve(true);
+    });
+  }, 30);});
 };
 
-Game.Entity.actions.burnTile = function (killer) {
-  if (killer.tile === 'fire' || killer.crateType !== undefined) {
+Game.Entity.actions.extinguish = function (killer) {
+  if (killer.tile === 'fire' || killer.crateType !== undefined || killer.tile === 'dirt') {
     this.cellHere().burnt = true;
     this.map.removeEntity(this);
     return Promise.resolve(true);

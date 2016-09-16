@@ -24,9 +24,10 @@ Game.Entity.templates.crate = {
 Game.Entity.templates.fire = {
   tile: "fire",
   color: 0xff6600,
+  canKill: true,
   niceToBots: false,
   action: Game.Entity.actions.spreadFlames,
-  dies: Game.Entity.actions.burnTile
+  dies: Game.Entity.actions.extinguish
 };
 
 Game.Entity.templates.angrySkullBot = {

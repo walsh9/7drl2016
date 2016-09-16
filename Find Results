@@ -1,0 +1,135 @@
+Searching 26 files for "GAME OVER" (case sensitive)
+
+/Users/walsh9/Projects/7drl2016/assets/js/entity-actions.js:
+   18      thisPlayer.map.targets.shift();
+   19      thisPlayer.map.removeEntity(thisPlayer);
+   20:     console.log('GAME OVER');
+   21      resolve(true);
+   22    });
+
+/Users/walsh9/Projects/7drl2016/assets/js/screen.js:
+  130        Game.stage.addChild(levelLabel);
+  131  
+  132:       gameOverLabel = new PIXI.Text("GAME OVER", {font:"30px Audiowide", fill:"white"});
+  133        gameOverLabel.x = Game.stage.width / 2;
+  134        gameOverLabel.y = 0;
+
+2 matches across 2 files
+
+
+Searching 26 files for "playerDie" (case sensitive)
+
+/Users/walsh9/Projects/7drl2016/assets/js/entity-actions.js:
+   11  };
+   12  
+   13: Game.Entity.actions.playerDie = function (killer) {
+   14    var thisPlayer = this;
+   15    return new Promise(function(resolve) {
+
+/Users/walsh9/Projects/7drl2016/assets/js/entity-templates.js:
+    8    isPlayer:  true,
+    9    action: Game.Entity.actions.playerAction,
+   10:   dies: Game.Entity.actions.playerDie
+   11  };
+   12  
+
+2 matches across 2 files
+
+
+Searching 26 files for "playerDie" (case sensitive)
+
+/Users/walsh9/Projects/7drl2016/assets/js/entity-actions.js:
+   11  };
+   12  
+   13: Game.Entity.actions.playerDie = function (killer) {
+   14    var thisPlayer = this;
+   15    return new Promise(function(resolve) {
+
+/Users/walsh9/Projects/7drl2016/assets/js/entity-templates.js:
+    8    isPlayer:  true,
+    9    action: Game.Entity.actions.playerAction,
+   10:   dies: Game.Entity.actions.playerDie
+   11  };
+   12  
+
+2 matches across 2 files
+
+
+Searching 26 files for "falling" (case sensitive)
+
+/Users/walsh9/Projects/7drl2016/assets/js/crates.js:
+   61        })
+   62        .filter(function(entity) {
+   63:         return ((entity.crateType !== undefined && entity.falling > 0) || 
+   64            entity.isPlayer || 
+   65            entity.canKill
+
+/Users/walsh9/Projects/7drl2016/assets/js/entity-actions.js:
+  111    var canStartFalling = passableCellBelow && cellBelow.dug && !entitySupportingMe;
+  112  
+  113:   var isFalling = this.falling > 0;
+  114:   var isFallingHard = this.falling > 1;
+  115  
+  116    if ((isFalling && canKeepFalling) || (!isFalling && canStartFalling)) {
+  ...
+  118        if (fell) {
+  119          Game.Sound.play('crate_fall');
+  120:         thisEntity.falling += 1;
+  121        }
+  122        return true;
+  ...
+  125      if (isFallingHard) {
+  126        thisEntity.kill(thisEntity); // crash!
+  127:     } else { // else, gentle fall. stop falling and don't break;
+  128        Game.Sound.play('crate_soft_landing');
+  129:       thisEntity.falling = 0;
+  130      }
+  131      return Promise.resolve(true);
+  132    } else {
+  133:     thisEntity.falling = 0;
+  134      return Promise.resolve(false);
+  135    }
+
+7 matches across 2 files
+
+
+
+
+
+
+Searching 26 files for "canKill" (case sensitive)
+
+/Users/walsh9/Projects/7drl2016/assets/js/crates.js:
+   64            entity.isPlayer || 
+   65            entity.tile.fire ||
+   66:           entity.canKill
+   67          );
+   68        });
+
+/Users/walsh9/Projects/7drl2016/assets/js/entity-templates.js:
+   45    canDig: false,
+   46    canTunnel: false,
+   47:   canKill: true,
+   48    niceToBots: true,
+   49    angrySound: 'skull_anger',
+   ..
+   66    color: 0xffffff,
+   67    canPhase: false,
+   68:   canKill: true,
+   69    niceToBots: true,
+   70    angrySound: 'spook_anger',
+
+/Users/walsh9/Projects/7drl2016/assets/js/entity.js:
+   19      this.canCrush   = options.canCrush   || false;
+   20      this.canPush    = options.canPush    || false;
+   21:     this.canKill    = options.canKill    || false;
+   22      this.isFalling  = options.isFalling  || false;
+   23      this.isPushable = options.isPushable || false;
+   ..
+  207            var pushY = target.y + (target.y - thisEntity.y);
+  208            resolve(target.tryMove(pushX, pushY));
+  209:         } else if (thisEntity.canKill || thisEntity.canCrush && target.y == oldY + 1) {
+  210            target.kill(thisEntity);
+  211            resolve(true);
+
+6 matches across 3 files

@@ -66,8 +66,9 @@ Game.Crates.Group = {
         );
       });
     if (entitiesInMotion.length === 0) {
-      Game.currentScreen.map.engine.lock();
-    }
+        Game.currentScreen.map.engine.lock();
+        Game.refresh();
+    } else console.log('waiting for:', entitiesInMotion, Game.currentScreen.map.engine._lock);
   }
 };
 
@@ -113,6 +114,7 @@ Game.Crates.actions.explode = function(x, y, map, crateId) {
         target.kill({tile:'explosion', niceToBots: false});
       }
       cell.blasted = true;
+      cell.burnt = true;
       cell.neighbors().forEach(function(neighbor){ //link to blasted neigbors
         if (neighbor.blasted && !cell.linked(neighbor)) {
           cell.link(neighbor);
@@ -132,6 +134,46 @@ Game.Crates.actions.explode = function(x, y, map, crateId) {
   Game.display.render(Game.stage);
   blastZone.forEach(cleanUp);
 };
+
+Game.Crates.actions.expelDirt = function(x, y, map, crateId) {
+  var blastZone = [{x: x - 1, y: y - 1}, {x: x, y: y - 1}, {x: x + 1, y: y - 1},
+                   {x: x - 1, y: y},     {x: x, y: y},     {x: x + 1, y: y},
+                   {x: x - 1, y: y + 1}, {x: x, y: y + 1}, {x: x + 1, y: y + 1},
+                   {x: x - 2, y: y}, {x: x + 2, y: y},
+                   {x: x, y: y - 2}, {x: x, y: y + 2},];
+  function blastCell(pos) {
+    Game.Screen.addEffect("poof", pos, 0x886666, 300);
+    var cell = map.grid.getCell(pos.x, pos.y);
+    if (cell) {
+      var target = map.entityAt(cell.x, cell.y);
+      if (!(target && target.canDig)) {
+        if (target && target.tile === 'fire') {
+          target.kill({tile: 'dirt'});
+        }
+        cell.dug = false;
+      }
+      cell.color = 0x886666;
+      cell.burnt = false;
+      cell.neighbors().forEach(function(neighbor){ //link to blasted neigbors
+        if (cell.linked(neighbor)) {
+          cell.unlink(neighbor);
+        }
+      });
+    }
+  }
+  function cleanUp(pos) {
+    var cell = map.grid.getCell(pos.x, pos.y);
+    if (cell) {
+      cell.blasted = undefined;
+    }
+  }
+
+  Game.Sound.play('explode_1');
+  blastZone.forEach(blastCell);
+  Game.display.render(Game.stage);
+  blastZone.forEach(cleanUp);
+};
+
 
 Game.Crates.actions.laserBlast = function(x, y, map, crateId) {
   var blastZone = [                   {x: x, y: y - 2},
@@ -204,5 +246,10 @@ Game.Crates.types = [
     known: false,
     tile: "crate_fire",
     action: Game.Crates.actions.createFire  
+  },{
+    name: "dirt",
+    known: false,
+    tile: "crate_dirt",
+    action: Game.Crates.actions.expelDirt
   }
 ];

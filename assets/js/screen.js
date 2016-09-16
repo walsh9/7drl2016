@@ -98,6 +98,9 @@ Game.Screen.playScreen = {
       var x = cell.x;
       var y = cell.y;
       var pos = {x: x, y: y};
+      if (cell.color) {
+        Game.Screen.drawTile(container, "checks", pos, cell.color);
+      }
       if (cell.impassable) {
         Game.Screen.drawTile(container, "wall", pos, map.color);
       } else if (cell.dug) {
@@ -105,9 +108,8 @@ Game.Screen.playScreen = {
         if (cell.west  && cell.west.dug && cell.linked(cell.west))  { Game.Screen.drawTile(container, "dugwest", pos); }
         if (cell.north && cell.north.dug && cell.linked(cell.north)) { Game.Screen.drawTile(container, "dugnorth", pos); }
         if (cell.south && cell.south.dug && cell.linked(cell.south)) { Game.Screen.drawTile(container, "dugsouth", pos); }
-        if (cell.burnt) {
-          Game.Screen.drawTile(container, "debris", pos, 0x333333);
-        }
+        if (cell.links.length === 0) { Game.Screen.drawTile(container, "dugpocket", pos); }
+        if (cell.burnt) { Game.Screen.drawTile(container, "debris", pos, 0x333333); }
       }
     }
   },
