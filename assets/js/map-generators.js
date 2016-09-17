@@ -18,7 +18,7 @@ Game.Map.Generators.Basic = {
     var doorPositions = [{x:1, y:0}, {x:map.grid.width - 2, y:0}].randomize();
 
     var energyDoor = Object.create(Game.Entity).init(Game.Entity.templates.energyDoor, doorPositions[0].x, doorPositions[0].y);
-    var datachipDoor = Object.create(Game.Entity).init(Game.Entity.templates.datachipDoor, doorPositions[1].x, doorPositions[1].y); 
+    var datachipDoor = Object.create(Game.Entity).init(Game.Entity.templates.datachipDoor, doorPositions[1].x, doorPositions[1].y);
     map.addEntity(energyDoor);
     map.addEntity(datachipDoor);
     map.energyDoor   = energyDoor;
@@ -26,7 +26,7 @@ Game.Map.Generators.Basic = {
     return map;
   },
   placeObstacles: function(map) {
-    var numRects = map.numObstacles || ROT.RNG.getUniformInt(0, 10);
+    var numRects = this.options.obstacles || ROT.RNG.getUniformInt(0, 10);
     var randomObstacle = function(map) {
       var rect = {
         width: ROT.RNG.getUniformInt(1,3),

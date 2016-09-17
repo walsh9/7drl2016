@@ -5,8 +5,8 @@ Game.Screen.effects = {};
 Game.Screen.addEffect = function(tile, pos, color, time) {
   var key = pos.x + "," + pos.y;
   Game.Screen.effects[key] = {x: pos.x, y: pos.y, tile: tile, color: color};
-  setTimeout(function() { 
-    delete Game.Screen.effects[key]; 
+  setTimeout(function() {
+    delete Game.Screen.effects[key];
     Game.refresh();
   }, time);
 };
@@ -46,8 +46,8 @@ Game.Screen.playScreen = {
   everyTurn: function() {
 
   },
-  exit: function() { 
-    console.log("Exited play screen."); 
+  exit: function() {
+    console.log("Exited play screen.");
   },
   nextLevel: function() {
     this.level += 1;
@@ -165,14 +165,14 @@ Game.Screen.playScreen = {
 
       Game.Screen.drawTile(Game.stage, Game.Item.templates.energy.tile, {x: 0, y: -2}, Game.Item.templates.energy.color );
       Game.Screen.drawTile(Game.stage, Game.Item.templates.datachip.tile, {x: 0, y: -1}, Game.Item.templates.datachip.color );
-      
-      energyCounter = new PIXI.Text("x " + this.player.items.energy + " / " + this.levelOptions.energyNeeded, 
+
+      energyCounter = new PIXI.Text("x " + this.player.items.energy + " / " + this.levelOptions.energyNeeded,
         {font:"20px Audiowide", fill:"white"});
       energyCounter.x = Game.tileSize.x;
       energyCounter.y = line1y;
       Game.stage.addChild(energyCounter);
 
-      datachipCounter = new PIXI.Text("x " + this.player.items.datachip + " / " + this.levelOptions.datachipsNeeded, 
+      datachipCounter = new PIXI.Text("x " + this.player.items.datachip + " / " + this.levelOptions.datachipsNeeded,
         {font:"20px Audiowide", fill:"white"});
       datachipCounter.x = Game.tileSize.x;
       datachipCounter.y = line2y;
@@ -228,22 +228,22 @@ Game.Screen.playScreen = {
         Game.refresh();
       } else if (this.inputLocked) {
         this.bufferInput(inputType, inputData);
-      } else if (inputData.keyCode === ROT.VK_LEFT || 
+      } else if (inputData.keyCode === ROT.VK_LEFT ||
         inputData.keyCode === ROT.VK_H ||
         inputData.keyCode === ROT.VK_NUMPAD4) {
         this.lockInput();
         this.move(-1, 0);
-      } else if (inputData.keyCode === ROT.VK_RIGHT || 
+      } else if (inputData.keyCode === ROT.VK_RIGHT ||
                  inputData.keyCode === ROT.VK_L ||
                  inputData.keyCode === ROT.VK_NUMPAD6) {
         this.lockInput();
         this.move(1, 0);
-      } else if (inputData.keyCode === ROT.VK_UP || 
+      } else if (inputData.keyCode === ROT.VK_UP ||
                  inputData.keyCode === ROT.VK_K ||
                  inputData.keyCode === ROT.VK_NUMPAD8) {
         this.lockInput();
         this.move(0, -1);
-      } else if (inputData.keyCode === ROT.VK_DOWN || 
+      } else if (inputData.keyCode === ROT.VK_DOWN ||
                  inputData.keyCode === ROT.VK_J ||
                  inputData.keyCode === ROT.VK_NUMPAD2) {
         this.lockInput();
@@ -253,7 +253,7 @@ Game.Screen.playScreen = {
         // Not a valid key
         return;
       }
-    } 
+    }
   },
   move: function(dX, dY) {
     var newX = this.player.x + dX;
@@ -300,16 +300,16 @@ Game.Screen.playScreen = {
         }
         self.unlockInput();
       }
-    }); 
+    });
   },
 };
 
 Game.Screen.winScreen = {
   enter: function() {
-    console.log("Entered win screen."); 
+    console.log("Entered win screen.");
   },
-  exit: function() { 
-    console.log("Exited win screen."); 
+  exit: function() {
+    console.log("Exited win screen.");
   },
   render: function(display) {
     Game.display.backgroundColor = 0x01579B;
@@ -338,8 +338,8 @@ Game.Screen.winScreen = {
 };
 
 Game.Screen.loseScreen = {
-  enter: function() { 
-    console.log("Entered lose screen."); 
+  enter: function() {
+    console.log("Entered lose screen.");
   },
   exit: function() { console.log("Exited lose screen."); },
   render: function(display) {
