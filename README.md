@@ -2,7 +2,7 @@
 
 <img src="docs/screenshot.png" width=480>
 
-A 7-day roguelike about digging tunnels and dropping crates.  
+A 7-day roguelike about digging tunnels and dropping crates.
 
 Made for the 2106 7-day Roguelike Challenge.
 
@@ -13,7 +13,7 @@ Made for the 2106 7-day Roguelike Challenge.
 #Description
 
 Control Bisby with arrow keys, hjkl, or number pad.
-You can clear levels in two different ways:  
+You can clear levels in two different ways:
 
 - Collect all the yellow energy units and open the yellow gate.
 - Crush enemies with crates, collect their blue datachips, and open the blue gate.
@@ -27,6 +27,11 @@ Guide Bisby safely through 7 levels to reach the surface.
 - It's turn-based. Enemies only move after you move. Take your time!
 
 #Changelog
+
+## v1.3.0
+- Add 2 exciting new crate types
+- Add random obstacle walls
+- Remove the crate with the down arrow that just digs down if it hits dirt
 
 ## v1.2.2
 - Bug fixes
@@ -46,7 +51,7 @@ Guide Bisby safely through 7 levels to reach the surface.
 
 ## v7DRL
 
-Seven-day version features:  
+Seven-day version features:
 
 - Random tunnels
 - Random crates
