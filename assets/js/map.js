@@ -23,7 +23,7 @@ Game.Map = {
     h = h || this.grid.height;
     var map = this;
     var emptyCell = this.find(function(cell) {
-      return cell.dug && 
+      return cell.dug &&
       !cell.impassable &&
       cell.x >= x && cell.x < x + w &&
       cell.y >= y && cell.y < y + h &&
@@ -47,16 +47,16 @@ Game.Map = {
       return (!cell.dug && !map.itemAt(cell.x, cell.y) && !cell.impassable);
     });
   },
-  randomStable: function() {
-    var map = this;
-    return this.find(function(cell) {
-      return !cell.dug && 
-        cell.south && 
-        !cell.south.dug && 
+  randomCrateSpot: function() {
+     var map = this;
+     return this.find(function(cell) {
+        return !cell.dug &&
+        !cell.impassable &&
         cell.y < map.grid.height - 5 &&
-        !cell.impassable && 
-        map.unoccupiedAt(cell.x, cell.y);
-    });
+        map.unoccupiedAt(cell.x, cell.y) &&
+        map.supportedAt(cell.x, cell.y) &&
+        map.breakableAt(cell.x, cell.y);
+     });
   },
   addEntity: function(entity) {
     entity.map = this;
@@ -97,7 +97,7 @@ Game.Map = {
       while (frontier.length > 0) {
         current = frontier.shift();
         current.neighbors().some( function(neighbor) {
-          if (neighbor.searched === undefined && 
+          if (neighbor.searched === undefined &&
               !item.map.grid.getCell(neighbor.x, neighbor.y).impassable &&
               !item.map.entityAt(neighbor.x, neighbor.y)) {
             key = neighbor.x + ',' + neighbor.y;
@@ -153,6 +153,22 @@ Game.Map = {
   },
   unoccupiedAt: function(x, y) {
     return !!(this.entities[x + ',' + y] === undefined);
+  },
+  supportedAt: function(x, y) { //has ground beneath it
+    cell = this.grid.getCell(x, y);
+    return cell.south && !cell.south.dug;
+  },
+  breakableAt: function(x, y) {
+    //for finding crate positions,
+    //not between two walls horizontally
+    //if next to one wall, mus have at least two diggable spaces below
+    cell = this.grid.getCell(x, y);
+    var betweenTwoWalls = cell.west.impassable && cell.east.impassable;
+    var nextToNoWalls = !cell.west.impassable && !cell.east.impassable;
+    var nextToOnlyOneWall = (cell.west.impassable || cell.east.impassable) && !betweenTwoWalls;
+    var twoSpacesBelow = cell.south && cell.south.south &&
+        !cell.south.impassable && !cell.south.south.impassable;
+    return (nextToNoWalls || (nextToOnlyOneWall && twoSpacesBelow));
   }
 };
 

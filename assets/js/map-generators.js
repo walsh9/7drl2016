@@ -102,7 +102,7 @@ Game.Map.Generators.Basic = {
     var crateCount = this.options.crates;
     var crateTypes = this.options.crateTypes;
     for (n = 0; n < crateCount; n++) {
-      targetCell = map.randomStable();
+      targetCell = map.randomCrateSpot();
       if (!targetCell) {break;}
       crate = Object.create(Game.Entity).init(Game.Entity.templates.crate, targetCell.x, targetCell.y);
       crate.crateType = Game.Crates.random(crateTypes);
