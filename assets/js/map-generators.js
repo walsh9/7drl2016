@@ -18,12 +18,40 @@ Game.Map.Generators.Basic = {
     var doorPositions = [{x:1, y:0}, {x:map.grid.width - 2, y:0}].randomize();
 
     var energyDoor = Object.create(Game.Entity).init(Game.Entity.templates.energyDoor, doorPositions[0].x, doorPositions[0].y);
-    var datachipDoor = Object.create(Game.Entity).init(Game.Entity.templates.datachipDoor, doorPositions[1].x, doorPositions[1].y); 
+    var datachipDoor = Object.create(Game.Entity).init(Game.Entity.templates.datachipDoor, doorPositions[1].x, doorPositions[1].y);
     map.addEntity(energyDoor);
     map.addEntity(datachipDoor);
     map.energyDoor   = energyDoor;
     map.datachipDoor = datachipDoor;
     return map;
+  },
+  placeObstacles: function(map) {
+    var numRects = this.options.obstacles || ROT.RNG.getUniformInt(0, 10);
+    var randomObstacle = function(map) {
+      var rect = {
+        width: ROT.RNG.getUniformInt(1,3),
+        height: ROT.RNG.getUniformInt(1,3)
+      };
+      rect.x = ROT.RNG.getUniformInt(2, map.grid.width - 2 - rect.width);
+      rect.y = ROT.RNG.getUniformInt(2, map.grid.width - 4 - rect.height);
+      return rect;
+    };
+    for (var i = 0; i < numRects; i++) {
+      var obstacle = randomObstacle(map);
+      for(var x = obstacle.x; x < obstacle.x + obstacle.width; x++) {
+        for(var y = obstacle.y; y < obstacle.y + obstacle.height; y++) {
+          map.grid.getCell(x, y).impassable = true;
+        }
+      }
+      for(var borderX = obstacle.x - 1; borderX < obstacle.x + obstacle.width + 1; borderX++) {
+        map.grid.getCell(borderX, obstacle.y - 1).impassable = false;
+        map.grid.getCell(borderX, obstacle.y + obstacle.height).impassable = false;
+      }
+      for(var borderY = obstacle.y - 1; borderY < obstacle.y + obstacle.height + 1; borderY++) {
+        map.grid.getCell(obstacle.x - 1, borderY).impassable = false;
+        map.grid.getCell(obstacle.x + obstacle.width, borderY).impassable = false;
+      }
+    }
   },
   placeItems: function(map) {
     var energyCount = this.options.energy;
@@ -74,7 +102,7 @@ Game.Map.Generators.Basic = {
     var crateCount = this.options.crates;
     var crateTypes = this.options.crateTypes;
     for (n = 0; n < crateCount; n++) {
-      targetCell = map.randomStable();
+      targetCell = map.randomCrateSpot();
       if (!targetCell) {break;}
       crate = Object.create(Game.Entity).init(Game.Entity.templates.crate, targetCell.x, targetCell.y);
       crate.crateType = Game.Crates.random(crateTypes);

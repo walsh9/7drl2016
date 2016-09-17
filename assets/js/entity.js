@@ -19,7 +19,6 @@ Game.Entity = {
     this.canCrush   = options.canCrush   || false;
     this.canPush    = options.canPush    || false;
     this.canKill    = options.canKill    || false;
-    this.isFalling  = options.isFalling  || false;
     this.isPushable = options.isPushable || false;
     this.isPlayer   = options.isPlayer   || false;
     this.angryForm  = options.angryForm  || {};
@@ -50,8 +49,8 @@ Game.Entity = {
       thisEntity.slidingY = oldY;
       function slide(entity, x, y) {
         var threshold = 0.01;
-        if ((entity.slidingX < x + threshold && entity.slidingX > x - threshold) && 
-            (entity.slidingY < y + threshold && entity.slidingY > y - threshold)) {    
+        if ((entity.slidingX < x + threshold && entity.slidingX > x - threshold) &&
+            (entity.slidingY < y + threshold && entity.slidingY > y - threshold)) {
           entity.slidingX = entity.x = x;
           entity.slidingY = entity.y = y;
           thisEntity.map.updateEntityPosition(thisEntity, oldX, oldY);
@@ -59,10 +58,10 @@ Game.Entity = {
         } else {
           var speed = 0.25;
           var interval = 1/60 * 1000;
-          if      (entity.slidingX > x) {entity.slidingX = entity.slidingX - speed}
-          else if (entity.slidingX < x) {entity.slidingX = entity.slidingX + speed} 
-          if      (entity.slidingY > y) {entity.slidingY = entity.slidingY - speed}
-          else if (entity.slidingY < y) {entity.slidingY = entity.slidingY + speed}
+          if      (entity.slidingX > x) {entity.slidingX = entity.slidingX - speed;}
+          else if (entity.slidingX < x) {entity.slidingX = entity.slidingX + speed;}
+          if      (entity.slidingY > y) {entity.slidingY = entity.slidingY - speed;}
+          else if (entity.slidingY < y) {entity.slidingY = entity.slidingY + speed;}
           Game.refresh();
           setTimeout(function() { slide(entity, x, y); }, interval);
         }
@@ -156,17 +155,17 @@ Game.Entity = {
     Object.assign(this, this.defaultTemplate);
   },
   getTile: function() {
-    if (this.crateType === undefined) {
-      return this.tile;
-    } else {
+    if (this.isCrate()) {
       return Game.Crates.getTile(this.crateType);
+    } else {
+      return this.tile;
     }
   },
   getColor: function() {
-    if (this.crateType === undefined) {
-      return this.color;
-    } else {
+    if (this.isCrate()) {
       return Game.Crates.getColor(this.crateType);
+    } else {
+      return this.color;
     }
   },
   act: function() {
@@ -179,6 +178,9 @@ Game.Entity = {
   },
   kill: function(killer) {
     return this.dies.call(this, killer);
+  },
+  isCrate: function() {
+    return this.crateType !== undefined;
   },
   isCheckmatedPlayer: function() {
     var player = this;
@@ -193,7 +195,7 @@ Game.Entity = {
 
     return passableNeigbors.length === 0 && !openDoorIsAbovePlayer;
   },
-  tryClearEntityAt(targetCell) {
+  tryClearEntityAt: function(targetCell) {
     var thisEntity = this;
     var oldX = this.x;
     var oldY = this.y;
@@ -214,7 +216,7 @@ Game.Entity = {
       resolve(false);
     });
   },
-  tryEnter(targetCell) {
+  tryEnter: function(targetCell) {
     var x = targetCell.x;
     var y = targetCell.y;
     var thisCell = this.cellHere();
@@ -226,8 +228,8 @@ Game.Entity = {
         targetCell.dug = true;
         thisCell.link(targetCell);
       }
-      return this.movePosition(x, y);      
+      return this.movePosition(x, y);
     }
-    return false;
+    return Promise.resolve(false);
   }
 };

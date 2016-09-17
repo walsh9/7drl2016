@@ -8,7 +8,7 @@ Game.Sound = {
     this.muted = (location.hash === "#silent");
     return this;
   },
-  play(audio) {
+  play: function(audio) {
     if (!this.muted) {
       if (typeof audio === 'string' || audio instanceof String) {
         this._playOneSound(audio);
@@ -16,32 +16,32 @@ Game.Sound = {
         this._playSounds(audio);
       } else {
         throw new Error('Can only play a string or array of strings');
-      };
+      }
     }
   },
-  mute() {
+  mute: function() {
     this.muted = true;
     location.hash = "#silent";
   },
-  unmute() {
+  unmute: function() {
     this.muted = false;
     location.hash = "";
   },
-  toggleMute() {
+  toggleMute: function() {
     if (this.muted) {
       this.unmute();
     } else {
       this.mute();
     }
   },
-  _playOneSound(name) {
+  _playOneSound: function(name) {
     var soundId = this.sound.play(name);
     var self = this;
     return new Promise(function(resolve) {
       self.sound.on('end', resolve, soundId);
     });
   },
-  _playSounds(names) {
+  _playSounds: function(names) {
     var self = this;
     return names.reduce(function(prevPromise, name) {
       return prevPromise.then(function() {
