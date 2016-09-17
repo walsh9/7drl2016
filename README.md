@@ -32,6 +32,7 @@ Guide Bisby safely through 7 levels to reach the surface.
 - Add 2 exciting new crate types
 - Add random obstacle walls
 - Remove the crate with the down arrow that just digs down if it hits dirt
+- Bug fixes
 
 ## v1.2.2
 - Bug fixes
