@@ -230,6 +230,6 @@ Game.Entity = {
       }
       return this.movePosition(x, y);
     }
-    return false;
+    return Promise.resolve(false);
   }
 };
