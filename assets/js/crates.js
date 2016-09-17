@@ -60,24 +60,27 @@ Game.Crates.Group = {
         return Game.currentScreen.map.entities[key];
       })
       .filter(function(entity) {
-        return ((entity.crateType !== undefined && entity.falling > 0) || 
-          entity.isPlayer || 
+        return ((entity.isCrate() && entity.falling > 0) ||
+          entity.isPlayer ||
           entity.canKill
         );
       });
     if (entitiesInMotion.length === 0) {
         Game.currentScreen.map.engine.lock();
         Game.refresh();
-    } else console.log('waiting for:', entitiesInMotion, Game.currentScreen.map.engine._lock);
+    } else {
+      Game.refresh();
+    }
   }
 };
 
 Game.Crates.colors = [
-0xC2C3C7,
-0xFFA300,
+0xFFCCAA,
+0x83769C,
 0x29ADFF,
 0xFF004D,
-0x00E756,
+0xFFA300,
+0xFFFF27,
 ];
 
 Game.Crates.actions = {};
@@ -96,9 +99,13 @@ Game.Crates.actions.createEnemy = function(x, y, map, crateId) {
 };
 
 Game.Crates.actions.createFire = function(x, y, map, crateId) {
-  //Game.Sound.play('fire');
-  var fire = Object.create(Game.Entity).init(Game.Entity.templates.fire, x, y);
-  map.addEntity(fire);
+  // Game.Sound.play('fire');
+  // don't create fire inside dirt.
+  var cell = map.grid.getCell(x, y);
+  if (cell.dug) {
+    var fire = Object.create(Game.Entity).init(Game.Entity.templates.fire, x, y);
+    map.addEntity(fire);
+  }
 };
 
 Game.Crates.actions.explode = function(x, y, map, crateId) {
@@ -111,7 +118,7 @@ Game.Crates.actions.explode = function(x, y, map, crateId) {
     if (cell) {
       var target = map.entityAt(cell.x, cell.y);
       if (target) {
-        target.kill({tile:'explosion', niceToBots: false});
+        target.kill({tile:'explosion', niceToBots: false, isCrate: function() {return false;} });
       }
       cell.blasted = true;
       cell.burnt = true;
@@ -148,7 +155,7 @@ Game.Crates.actions.expelDirt = function(x, y, map, crateId) {
       var target = map.entityAt(cell.x, cell.y);
       if (!(target && target.canDig)) {
         if (target && target.tile === 'fire') {
-          target.kill({tile: 'dirt'});
+          target.kill({tile: 'dirt', isCrate: function() {return false;}});
         }
         cell.dug = false;
       }
@@ -197,7 +204,7 @@ Game.Crates.actions.laserBlast = function(x, y, map, crateId) {
     if (cell) {
       var target = map.entityAt(cell.x, cell.y);
       if (target) {
-        target.kill({tile:'explosion', niceToBots: false});
+        target.kill({tile:'explosion', niceToBots: false, isCrate: function() {return false;}});
       }
       cell.blasted = true;
       cell.neighbors().forEach(function(neighbor){ //link to blasted neigbors
@@ -230,12 +237,12 @@ Game.Crates.types = [
     name: "exploding",
     known: false,
     tile: "crate_blast",
-    action: Game.Crates.actions.explode    
+    action: Game.Crates.actions.explode
   },{
     name: "enemy",
     known: false,
     tile: "crate_enemy",
-    action: Game.Crates.actions.createEnemy   
+    action: Game.Crates.actions.createEnemy
   },{
     name: "laser",
     known: false,
@@ -245,7 +252,7 @@ Game.Crates.types = [
     name: "fire",
     known: false,
     tile: "crate_fire",
-    action: Game.Crates.actions.createFire  
+    action: Game.Crates.actions.createFire
   },{
     name: "dirt",
     known: false,

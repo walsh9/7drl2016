@@ -64,7 +64,7 @@ Game.Map = {
     if (entity.isPlayer) {
       this.player = entity;
     }
-    if (entity.crateType !== undefined) {
+    if (entity.isCrate()) {
       this.crates.add(entity);
     } else {
       this.scheduler.add(entity, true);
@@ -75,7 +75,7 @@ Game.Map = {
     if (this.entities[key] == entity) {
       delete this.entities[key];
     }
-    if (entity.crateType !== undefined) {
+    if (entity.isCrate()) {
       this.crates.remove(entity);
     } else {
       this.scheduler.remove(entity);
